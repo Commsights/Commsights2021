@@ -3155,6 +3155,12 @@ namespace Commsights.MVC.Controllers
             string note = AppGlobal.Success + " - " + AppGlobal.DeleteSuccess;
             return Json(note);
         }
+        public IActionResult DeleteProductAndProductPropertyByDatePublishBeginAndDatePublishEndAndIndustryIDAndIsUploadAndEmployeeID(DateTime datePublishBegin, DateTime datePublishEnd, int industryID, bool isUpload)
+        {
+            _reportRepository.DeleteProductAndProductPropertyByDatePublishBeginAndDatePublishEndAndIndustryIDAndIsUploadAndEmployeeID(datePublishBegin, datePublishEnd, industryID, isUpload, RequestUserID);
+            string note = AppGlobal.Success + " - " + AppGlobal.DeleteSuccess;
+            return Json(note);
+        }
         public IActionResult UpdateByIndustryIDAndDatePublishBeginAndDatePublishEndAndAllData(int industryID, DateTime datePublishBegin, DateTime datePublishEnd, bool allData)
         {
             if (allData == true)

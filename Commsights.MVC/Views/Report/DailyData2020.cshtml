@@ -31,11 +31,11 @@
                      .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetIndustryToList", "Config")))
                             )
                     </div>
-                    <div class='col-sm-2' style="display:flex; justify-content:start; align-items:center;">
-                        <input id="IsUpload" type="checkbox">
+                    <div class='col-sm-1' style="display:flex; justify-content:start; align-items:center;">
+                        <input id="IsUpload" type="checkbox" checked="checked">
                         <p style="display:inline-block; font-size:14px; font-weight:bold; margin:0; padding-left:10px; margin-right:10px;">Up/Pub</p>
                     </div>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <button style="width:50px;" type="button" class="btn btn-success" title="Search" onclick="onSearch()">
                             <span class="fas fa-search"></span>
                         </button>
@@ -124,7 +124,7 @@
     model.Field(t => t.ID).Editable(false);
     model.Field(t => t.DateUpdated).Editable(false);
     model.Field(t => t.ProductID).Editable(false);
-    model.Field(t => t.Page).Editable(false);    
+    model.Field(t => t.Page).Editable(false);
     model.Field(t => t.DatePublish).Editable(false);
     model.Field(t => t.Media).Editable(false);
     model.Field(t => t.MediaType).Editable(false);
@@ -174,7 +174,7 @@
         var isUploadValue = document.getElementById('IsUpload').checked;
             $.ajax({
                 type: 'GET',
-                url: "@Url.Action("DeleteByDatePublishBeginAndDatePublishEndAndIndustryIDAndIsUpload", "Report")",
+                url: "@Url.Action("DeleteProductAndProductPropertyByDatePublishBeginAndDatePublishEndAndIndustryIDAndIsUploadAndEmployeeID", "Report")",
                 data: {
                     industryID: industryIDValue,
                     datePublishBegin: datePublishBeginValue,
@@ -185,7 +185,7 @@
             }).done(() => {
                 $("#ProductDataTransfer").data("kendoGrid").dataSource.read();
                 EndRequestHandler();
-            });        
+            });
     }
     function addProductProperty(e) {
         var productProperty = this.dataItem($(e.currentTarget).closest("tr"));

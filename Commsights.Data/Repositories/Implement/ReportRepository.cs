@@ -562,6 +562,31 @@ namespace Commsights.Data.Repositories
             }
             return result;
         }
+        public string DeleteProductAndProductPropertyByDatePublishBeginAndDatePublishEndAndIndustryIDAndIsUploadAndEmployeeID(DateTime datePublishBegin, DateTime datePublishEnd, int industryID, bool isUpload, int employeeID)
+        {
+            string result = "";
+            if (industryID > 0)
+            {
+                datePublishBegin = new DateTime(datePublishBegin.Year, datePublishBegin.Month, datePublishBegin.Day, 0, 0, 0);
+                datePublishEnd = new DateTime(datePublishEnd.Year, datePublishEnd.Month, datePublishEnd.Day, 23, 59, 59);
+                SqlParameter[] parameters =
+                       {
+                    new SqlParameter("@DatePublishBegin",datePublishBegin),
+                    new SqlParameter("@DatePublishEnd",datePublishEnd),
+                    new SqlParameter("@IndustryID",industryID),
+                    new SqlParameter("@EmployeeID",employeeID),
+                    };
+                if (isUpload == true)
+                {
+                    result = SQLHelper.ExecuteNonQuery(AppGlobal.ConectionString, "sp_ReportDailyDeleteProductAndProductPropertyByDateUpdatedBeginAndDateUpdatedEndAndIndustryIDAndEmployeeID", parameters);
+                }
+                else
+                {
+                    result = SQLHelper.ExecuteNonQuery(AppGlobal.ConectionString, "sp_ReportDailyDeleteProductAndProductPropertyByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeID", parameters);
+                }
+            }
+            return result;
+        }
         public string DeleteProductSearchAndProductSearchPropertyByDatePublishBeginAndDatePublishEndAndIndustryIDAndHourSearch(DateTime datePublishBegin, DateTime datePublishEnd, int industryID, int hourSearch)
         {
             string result = "";
