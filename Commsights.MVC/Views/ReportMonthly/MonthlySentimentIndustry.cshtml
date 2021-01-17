@@ -1,0 +1,595 @@
+﻿@{ ViewData["Title"] = Model.Title + " - Sentiment"; }
+
+@model Commsights.MVC.Models.ReportMonthlyViewModel
+@Html.HiddenFor(Model => Model.ID)
+@Html.HiddenFor(Model => Model.Title)
+<div>
+    | <a href="/ReportMonthly/MonthlyReport?ID=@Model.ID" class="text-success" title="Report">Report</a> |
+    <a href="/ReportMonthly/MonthlyIndustry?ID=@Model.ID" class="text-success" title="Industtry">Industry</a> |
+    <a href="/ReportMonthly/MonthlyCompanyCount?ID=@Model.ID" class="text-success" title="Company">Company Count</a> |
+    <a href="/ReportMonthly/MonthlyFeatureIndustry?ID=@Model.ID" class="text-success" title="Feature-Mention">Feature-Mention</a> |
+    <a href="/ReportMonthly/MonthlySentimentIndustry?ID=@Model.ID" class="text-success" title="Sentiment">Sentiment</a> |
+    <a href="/ReportMonthly/MonthlyChannel?ID=@Model.ID" class="text-success" title="Channel">Channel</a> |
+    <a href="/ReportMonthly/MonthlyTierCommsights?ID=@Model.ID" class="text-success" title="Media Tiers">Media Tiers</a> |
+    <a href="/ReportMonthly/MonthlyIndustry?ID=@Model.ID" class="text-success" title="Industtry">Category</a> |
+    <a href="/ReportMonthly/MonthlyTrendLine?ID=@Model.ID" class="text-success" title="Trendline">Trendline</a> |
+    <a href="/ReportMonthly/MonthlyIndustry?ID=@Model.ID" class="text-success" title="Industtry">Campaign</a> |
+    <a href="/ReportMonthly/MonthlyIndustry?ID=@Model.ID" class="text-success" title="Industtry">Key Stories</a> |
+    <a href="/ReportMonthly/MonthlyCompanyAndYear?ID=@Model.ID" class="text-success" title="MonthlyCompanyAndYear">Brand Growth</a> |
+    <a href="/ReportMonthly/MonthlySegmentProduct?ID=@Model.ID" class="text-success" title="Product segment">Product segment</a> |
+    <a href="/ReportMonthly/MonthlyTierCommsightsAndCompanyName?ID=@Model.ID" class="text-success" title="Top titles">Top titles</a> |
+    <a href="/ReportMonthly/MonthlyIndustry?ID=@Model.ID" class="text-success" title="Industtry">Scorecard</a> |
+    <a href="/ReportMonthly/MonthlyData?ID=@Model.ID" class="text-success" title="Data">Data</a> |
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">@Model.Title - Sentiment</h3>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div id="DataSentiment" class='col-sm-12'></div>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <div id="DataSentimentAndMediaType" class='col-sm-12'></div>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <div id="DataSentimentAndFeature" class='col-sm-12'></div>
+                </div>
+            </div>
+            <table style="width:100%;">
+                <tr>
+                    <td valign="top">
+                        <div>
+                            <div class="row">
+                                <div class='col-sm-2'>
+                                    <button type="button" class="btn btn-success" onclick="exportJPG('chartDonutPositivePercentThisMonth')"><span class="fas fa-file-image"></span></button>
+                                </div>
+                            </div>
+                            <div>
+                                @(Html.Kendo().Chart(Model.ListReportMonthlySentimentDataTransfer)
+        .Name("chartDonutPositivePercentThisMonth")
+       .Theme("Material")
+.Title(t=>t.Text("Positive").Color("#0000ff").Font("20px sans-serif"))
+  .HtmlAttributes(new { style = "min-height:400px; font-size:12px;" })
+   .Legend(legend => legend
+       .Position(ChartLegendPosition.Bottom)
+   )
+   .ChartArea(chartArea => chartArea
+      .Background("#ffffff")
+  )
+        .Series(series => {
+            series.Donut(t => t.PositivePercent, t => t.CompanyName)
+            .Labels(labels => labels
+            .Visible(true)
+            .Position(ChartPieLabelsPosition.OutsideEnd)
+            .Template("#=category# - #=value#%")
+            .Background("#ffffff")
+        );
+        })
+        .Tooltip(tooltip => tooltip
+        .Visible(true)
+                .Template("#=category#: #=value#%")
+        )
+    )
+                            </div>
+                        </div>
+                    </td>
+                    <td valign="top">
+                        <div>
+                            <div class="row">
+                                <div class='col-sm-2'>
+                                    <button type="button" class="btn btn-success" onclick="exportJPG('chartDonutNeutralPercentThisMonth')"><span class="fas fa-file-image"></span></button>
+                                </div>
+                            </div>
+                            <div>
+                                @(Html.Kendo().Chart(Model.ListReportMonthlySentimentDataTransfer)
+        .Name("chartDonutNeutralPercentThisMonth")
+       .Theme("Material")
+.Title(t=>t.Text("Neutral").Color("#0000ff").Font("20px sans-serif"))
+  .HtmlAttributes(new { style = "min-height:400px; font-size:12px;" })
+   .Legend(legend => legend
+       .Position(ChartLegendPosition.Bottom)
+   )
+   .ChartArea(chartArea => chartArea
+      .Background("#ffffff")
+  )
+        .Series(series => {
+            series.Donut(t => t.NeutralPercent, t => t.CompanyName)
+           .Labels(labels => labels
+            .Visible(true)
+            .Position(ChartPieLabelsPosition.OutsideEnd)
+            .Template("#=category# - #=value#%")
+            .Background("#ffffff")
+        );
+        })
+        .Tooltip(tooltip => tooltip
+        .Visible(true)
+                .Template("#=category#: #=value#%")
+        )
+    )
+                            </div>
+                        </div>
+                    </td>
+                    <td valign="top">
+                        <div>
+                            <div class="row">
+                                <div class='col-sm-2'>
+                                    <button type="button" class="btn btn-success" onclick="exportJPG('chartDonutNegativePercentThisMonth')"><span class="fas fa-file-image"></span></button>
+                                </div>
+                            </div>
+                            <div>
+                                @(Html.Kendo().Chart(Model.ListReportMonthlySentimentDataTransfer)
+        .Name("chartDonutNegativePercentThisMonth")
+       .Theme("Material")
+.Title(t=>t.Text("Negative").Color("#0000ff").Font("20px sans-serif"))
+  .HtmlAttributes(new { style = "min-height:400px; font-size:12px;" })
+   .Legend(legend => legend
+       .Position(ChartLegendPosition.Bottom)
+   )
+   .ChartArea(chartArea => chartArea
+      .Background("#ffffff")
+  )
+        .Series(series => {
+            series.Donut(t => t.NegativePercent, t => t.CompanyName)
+           .Labels(labels => labels
+            .Visible(true)
+            .Position(ChartPieLabelsPosition.OutsideEnd)
+            .Template("#=category# - #=value#%")
+            .Background("#ffffff")
+        );
+        })
+        .Tooltip(tooltip => tooltip
+        .Visible(true)
+                .Template("#=category#: #=value#%")
+        )
+    )
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table style="width:100%;">
+                <tr>
+                    <td valign="top">
+                        <div>
+                            <div class="row">
+                                <div class='col-sm-2'>
+                                    <button type="button" class="btn btn-success" onclick="exportJPG('ChartBarSentiment')"><span class="fas fa-file-image"></span></button>
+                                </div>
+                            </div>
+                            <div>
+                                @(Html.Kendo().Chart(Model.ListReportMonthlySentimentDataTransfer)
+.Name("ChartBarSentiment")
+.Theme("Material")
+.Title(t => t.Text("Sentiment").Color("#0000ff").Font("20px sans-serif"))
+  .HtmlAttributes(new { style = "min-height:400px;" })
+   .Legend(legend => legend
+       .Position(ChartLegendPosition.Bottom)
+   )
+   .ChartArea(chartArea => chartArea
+      .Background("#ffffff")
+  )
+   .SeriesDefaults(seriesDefaults =>
+            seriesDefaults.Bar().Stack(true)
+        )
+.Series(series =>
+{
+    series.Bar(model => model.PositiveCount).Name("Positive").Axis("Sentiment").Color("Green");
+    series.Bar(model => model.NeutralCount).Name("Neutral").Axis("Sentiment").Color("Black");
+    series.Bar(model => model.NegativeCount).Name("Negative").Axis("Sentiment").Color("Red");
+})
+   .CategoryAxis(axis => axis
+      .Name("Customer")
+      .Title("Company")
+       .Categories(model => model.CompanyName)
+   )
+    .ValueAxis(axis => axis
+       .Numeric()
+       .Name("Sentiment")
+       .Title("")
+   )
+   .Tooltip(tooltip => tooltip
+       .Visible(true)
+       .Format("{0:N0}")
+   )
+     .Pannable(pannable => pannable
+            .Lock(ChartAxisLock.Y)
+        )
+        .Zoomable(zoomable => zoomable
+            .Mousewheel(mousewheel => mousewheel.Lock(ChartAxisLock.Y))
+            .Selection(selection => selection.Lock(ChartAxisLock.Y))
+        )
+            )
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class='col-sm-2'>
+                        <button type="button" class="btn btn-success" onclick="exportJPG('ChartColumnSentimentAndMediaType')"><span class="fas fa-file-image"></span></button>
+                    </div>
+                </div>
+                <div>
+                    @(Html.Kendo().Chart(Model.ListReportMonthlySentimentAndMediaTypeDataTransfer)
+.Name("ChartColumnSentimentAndMediaType")
+.Theme("Material")
+.Title(t => t.Text("Sentiment vs Mediatype").Color("#0000ff").Font("20px sans-serif"))
+  .HtmlAttributes(new { style = "min-height:400px;" })
+   .Legend(legend => legend
+       .Position(ChartLegendPosition.Bottom)
+   )
+   .ChartArea(chartArea => chartArea
+      .Background("#ffffff")
+  )
+.Series(series =>
+{
+    series.Column(model => model.OnlineCount).Name("Online").Axis("Online");
+    series.Column(model => model.NewspaperCount).Name("Newspaper").Axis("Online");
+    series.Column(model => model.TVCount).Name("TV").Axis("Online");
+    series.Column(model => model.MagazineCount).Name("Magazine").Axis("Online");
+})
+
+   .CategoryAxis(axis => axis
+      .Name("Customer")
+      .Title("")
+       .Categories(model => model.FullName)
+   )
+    //.CategoryAxis(category =>
+    //{
+    //    category.Name("Customer");
+    //    category.Title("");
+    //    category.Categories(model => model.SegmentProduct);
+    //    category.MajorGridLines(item =>
+    //    {
+    //        item.Visible(false);
+    //    });
+    //    category.Labels(item => {
+    //        item.Template("labelTemplate");
+    //        item.Padding(item01=> {
+    //            item01.Top(45);
+    //        });
+    //    });
+
+    //})
+    .ValueAxis(axis => axis
+       .Numeric()
+       .Name("Online")
+       .Title("Online")
+   )
+
+   .Tooltip(tooltip => tooltip
+       .Visible(true)
+       .Format("{0:N0}")
+   )
+     .Pannable(pannable => pannable
+            .Lock(ChartAxisLock.Y)
+        )
+        .Zoomable(zoomable => zoomable
+            .Mousewheel(mousewheel => mousewheel.Lock(ChartAxisLock.Y))
+            .Selection(selection => selection.Lock(ChartAxisLock.Y))
+        )
+            )
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class='col-sm-2'>
+                        <button type="button" class="btn btn-success" onclick="exportJPG('ChartColumnSentimentAndCompany')"><span class="fas fa-file-image"></span></button>
+                    </div>
+                </div>
+                <div>
+                    @(Html.Kendo().Chart(Model.ListReportMonthlySentimentDataTransfer)
+.Name("ChartColumnSentimentAndCompany")
+.Theme("Material")
+.Title(t => t.Text("Sentiment vs Company").Color("#0000ff").Font("20px sans-serif"))
+  .HtmlAttributes(new { style = "min-height:400px;" })
+   .Legend(legend => legend
+       .Position(ChartLegendPosition.Bottom)
+   )
+   .ChartArea(chartArea => chartArea
+      .Background("#ffffff")
+  )
+     .SeriesDefaults(seriesDefaults =>
+            seriesDefaults.Column().Stack(true)
+        )
+.Series(series =>
+{
+    series.Column(model => model.PositiveCount).Name("Positive").Axis("Sentiment");
+    series.Column(model => model.NeutralCount).Name("Neutral").Axis("Sentiment");
+    series.Column(model => model.NegativeCount).Name("Negative").Axis("Sentiment");
+})
+
+   .CategoryAxis(axis => axis
+      .Name("Customer")
+      .Title("Company")
+       .Categories(model => model.CompanyName)
+   )
+    .ValueAxis(axis => axis
+       .Numeric()
+       .Name("Sentiment")
+       .Title("Sentiment")
+   )
+
+   .Tooltip(tooltip => tooltip
+       .Visible(true)
+       .Format("{0:N0}")
+   )
+     .Pannable(pannable => pannable
+            .Lock(ChartAxisLock.Y)
+        )
+        .Zoomable(zoomable => zoomable
+            .Mousewheel(mousewheel => mousewheel.Lock(ChartAxisLock.Y))
+            .Selection(selection => selection.Lock(ChartAxisLock.Y))
+        )
+            )
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script>
+    function exportJPG(control) {
+        var Title = $('#Title').val();
+        var id = "#" + control;
+        var chart = $(id).getKendoChart();
+        chart.exportImage().done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: Title + ".jpg",
+                proxyURL: "@Url.Action("Export_Save", "ReportMonthly")"
+            });
+        });
+    }
+    $(document).ready(() => {
+        onGetSentimentByIDToListToJSON();
+        onGetSentimentAndMediaTypeWithoutSUMByIDToListToJSON();
+        onGetSentimentAndFeatureWithoutSUMByIDToListToJSON();        
+    });
+    function onGetSentimentByIDToListToJSON() {
+        BeginRequestHandler();
+        $("#DataSentiment").html('');
+        var IDValue = $("#ID").val();
+         $.ajax({
+            type: 'GET',
+            url: "@Url.Action("GetSentimentByIDToListToJSON", "ReportMonthly")",
+            data: {
+                ID: IDValue,
+            },
+             success: function (list) {
+                 var html = '<table class="border01" id="Data01" cellspacing="4" style="background-color:#ffffff; width: 100%;">';
+                 html = html + '<thead>';
+                 html = html + '<tr>';
+                 html = html + "<th class='text-center'><a style='cursor:pointer;'></a></th>";
+                 html = html + "<th class='text-center' colspan='3'><a style='cursor:pointer;'>Last month</a></th>";
+                 html = html + "<th class='text-center' colspan='3'><a style='cursor:pointer;'>This month</a></th>";
+                 html = html + "<th class='text-center' colspan='3'><a style='cursor:pointer;'>Growth (%)</a></th>";
+                 html = html + '</tr>';
+                html = html + '<tr>';
+                 html = html + "<th class='text-center' style='width: 28%;'><a style='cursor:pointer;'>Company</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer; color: green;'>Positive</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer;'>Neutral</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer; color: red;'>Negative</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer; color: green;'>Positive</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer;'>Neutral</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer; color: red;'>Negative</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer; color: green;'>Positive</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer;'>Neutral</a></th>";
+                 html = html + "<th class='text-center' style='width: 8%;'><a style='cursor:pointer; color: red;'>Negative</a></th>";
+                html = html + '</tr>';
+                html = html + '</thead>';
+                html = html + '<tbody>';
+                var no = 0;
+                 for (var index in list) {
+                     $(list[index]).each(function (iRec, item) {
+                        no = no + 1;
+                        if (no % 2 == 0) {
+                            html = html + '<tr style="background-color:#ffffff;">';
+                        }
+                        else {
+                            html = html + '<tr style="background-color:#f1f1f1;">';
+                        }
+                         html = html + '<td class="text-left" style="font-weight: bold;">' + item.CompanyName + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.PositiveLastMonthCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold;">' + item.NeutralLastMonthCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.NegativeLastMonthCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.PositiveCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold;">' + item.NeutralCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.NegativeCount + '</td>';
+                         if (item.PositiveGrowthPercent > 0) {
+                             html = html + '<td class="text-right" style="font-weight: bold; color: #ffffff; background-color: green;">' + item.PositiveGrowthPercent + '</td>';
+                         }
+                         else {
+                             if (item.PositiveGrowthPercent == 0) {
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.PositiveGrowthPercent + '</td>';
+                             }
+                             else {
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: #ffffff; background-color: red;">' + item.PositiveGrowthPercent + '</td>';
+                             }
+                         }
+                         if (item.NeutralGrowthPercent > 0) {
+                             html = html + '<td class="text-right" style="font-weight: bold; color: #ffffff; background-color: green;">' + item.NeutralGrowthPercent + '</td>';
+                         }
+                         else {
+                             if (item.NeutralGrowthPercent == 0) {
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.NeutralGrowthPercent + '</td>';
+                             }
+                             else {
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: #ffffff; background-color: red;">' + item.NeutralGrowthPercent + '</td>';
+                             }
+                         }
+                         if (item.NegativeGrowthPercent > 0) {
+                             html = html + '<td class="text-right" style="font-weight: bold; color: #ffffff; background-color: green;">' + item.NegativeGrowthPercent + '</td>';
+                         }
+                         else {
+                             if (item.NegativeGrowthPercent == 0) {
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.NegativeGrowthPercent + '</td>';
+                             }
+                             else {
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: #ffffff; background-color: red;">' + item.NegativeGrowthPercent + '</td>';
+                             }
+                         }
+                        html = html + '</tr>';
+                    });
+                }
+                html = html + '</tbody>';
+                html = html + '</table>';
+                html = $.parseHTML(html);
+                 $("#DataSentiment").append(html);
+            }
+         }).done(() => {
+             EndRequestHandler();
+        });
+    }
+    function onGetSentimentAndMediaTypeWithoutSUMByIDToListToJSON() {
+        BeginRequestHandler();
+        $("#DataSentimentAndMediaType").html('');
+        var IDValue = $("#ID").val();
+         $.ajax({
+            type: 'GET',
+            url: "@Url.Action("GetSentimentAndMediaTypeWithoutSUMByIDToListToJSON", "ReportMonthly")",
+            data: {
+                ID: IDValue,
+            },
+             success: function (list) {
+                 var html = '<table class="border01" id="Data01" cellspacing="4" style="background-color:#ffffff; width: 100%;">';
+                 html = html + '<thead>';
+                 html = html + '<tr>';
+                 html = html + "<th class='text-center' style='width: 40%;'><a style='cursor:pointer;'>Company</a></th>";
+                 html = html + "<th class='text-center' style='width: 20%;'><a style='cursor:pointer;'>Sentiment</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer;'>Online</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer;'>Newspaper</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer;'>TV</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer;'>Magazine</a></th>";
+                html = html + '</tr>';
+                html = html + '</thead>';
+                html = html + '<tbody>';
+                var no = 0;
+                 for (var index in list) {
+                     $(list[index]).each(function (iRec, item) {
+                        no = no + 1;
+                        if (no % 2 == 0) {
+                            html = html + '<tr style="background-color:#ffffff;">';
+                        }
+                        else {
+                            html = html + '<tr style="background-color:#f1f1f1;">';
+                         }
+                         if (item.SegmentProduct != "#N/A") {
+                             switch (item.Sentiment) {
+                                 case "Negative":
+                                     html = html + '<td rowspan="3" class="text-left" style="font-weight: bold;">' + item.CompanyName + '</td>';
+                                     break;
+                             }
+                         }
+                         else {
+                             html = html + '<td class="text-left" style="font-weight: bold;">' + item.SegmentProduct + '</td>';
+                         }
+                         html = html + '<td class="text-left" style="font-weight: bold;">' + item.Sentiment + '</td>';
+                         switch (item.Sentiment) {
+                             case "Positive":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.OnlineCount + '</td>';
+                                 break;
+                             case "Negative":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.OnlineCount + '</td>';
+                                 break;
+                             default:
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.OnlineCount + '</td>';
+                         }
+                         switch (item.Sentiment) {
+                             case "Positive":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.NewspaperCount + '</td>';
+                                 break;
+                             case "Negative":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.NewspaperCount + '</td>';
+                                 break;
+                             default:
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.NewspaperCount + '</td>';
+                         }
+                         switch (item.Sentiment) {
+                             case "Positive":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.TVCount + '</td>';
+                                 break;
+                             case "Negative":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.TVCount + '</td>';
+                                 break;
+                             default:
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.TVCount + '</td>';
+                         }
+                         switch (item.Sentiment) {
+                             case "Positive":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.MagazineCount + '</td>';
+                                 break;
+                             case "Negative":
+                                 html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.MagazineCount + '</td>';
+                                 break;
+                             default:
+                                 html = html + '<td class="text-right" style="font-weight: bold;">' + item.MagazineCount + '</td>';
+                         }
+                        html = html + '</tr>';
+                    });
+                }
+                html = html + '</tbody>';
+                html = html + '</table>';
+                html = $.parseHTML(html);
+                 $("#DataSentimentAndMediaType").append(html);
+            }
+         }).done(() => {
+             EndRequestHandler();
+        });
+    }
+    function onGetSentimentAndFeatureWithoutSUMByIDToListToJSON() {
+        BeginRequestHandler();
+        $("#DataSentimentAndFeature").html('');
+        var IDValue = $("#ID").val();
+         $.ajax({
+            type: 'GET',
+            url: "@Url.Action("GetSentimentAndFeatureWithoutSUMByIDToListToJSON", "ReportMonthly")",
+            data: {
+                ID: IDValue,
+            },
+             success: function (list) {
+                 var html = '<table class="border01" id="Data01" cellspacing="4" style="background-color:#ffffff; width: 100%;">';
+                 html = html + '<thead>';
+                 html = html + '<tr>';
+                 html = html + "<th class='text-center' style='width: 40%;'><a style='cursor:pointer;'>Company</a></th>";
+                 html = html + "<th class='text-center' style='width: 30%;'><a style='cursor:pointer;'>Feature/Mention</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer; color: green;'>Positive</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer;'>Neutral</a></th>";
+                 html = html + "<th class='text-center' style='width: 10%;'><a style='cursor:pointer; color: red;'>Negative</a></th>";
+                html = html + '</tr>';
+                html = html + '</thead>';
+                html = html + '<tbody>';
+                var no = 0;
+                 for (var index in list) {
+                     $(list[index]).each(function (iRec, item) {
+                        no = no + 1;
+                        if (no % 2 == 0) {
+                            html = html + '<tr style="background-color:#ffffff;">';
+                        }
+                        else {
+                            html = html + '<tr style="background-color:#f1f1f1;">';
+                        }
+                         html = html + '<td class="text-left" style="font-weight: bold;">' + item.CompanyName + '</td>';
+                         html = html + '<td class="text-left" style="font-weight: bold;">' + item.FeatureCorp + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold; color: green;">' + item.PositiveCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold;">' + item.NeutralCount + '</td>';
+                         html = html + '<td class="text-right" style="font-weight: bold; color: red;">' + item.NegativeCount + '</td>';
+                        html = html + '</tr>';
+                    });
+                }
+                html = html + '</tbody>';
+                html = html + '</table>';
+                html = $.parseHTML(html);
+                 $("#DataSentimentAndFeature").append(html);
+            }
+         }).done(() => {
+             EndRequestHandler();
+        });
+    }
+</script>

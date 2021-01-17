@@ -1,0 +1,231 @@
+﻿@{ ViewData["Title"] = "Setup"; }
+
+@model Commsights.Data.Models.ReportMonthly
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Setup</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class='form-group'>
+                            <label for='Replace'>Chỉnh tên báo giấy</label>
+                            <button type="button" class="btn btn-primary" onclick="onUpdatePressList()">
+                                <span class="fas fa-save"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class='form-group'>
+                            <label for='Replace'>Chỉnh tên website</label>
+                            <button type="button" class="btn btn-primary" onclick="onUpdateWebsiteList()">
+                                <span class="fas fa-save"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class='form-group'>
+                            <label for='Replace'>Chỉnh tên bài viết</label>
+                            <button type="button" class="btn btn-primary" onclick="onUpdateProduct()">
+                                <span class="fas fa-save"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class='form-group'>
+                            <label for='Replace'>Website scan</label>
+                            <button type="button" class="btn btn-primary" onclick="onCreateWebsiteScan()">
+                                <span class="fas fa-save"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class='form-group'>
+                            <label for='Replace'>Update Andi</label>
+                            <button type="button" class="btn btn-primary" onclick="onUpdateAndi()">
+                                <span class="fas fa-save"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Upload - Excel Monthly</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" onsubmit="return BeginRequestHandler()" action='@Url.Action("UploadDataReportMonthly001", "ReportMonthly")'>
+                    <div class='col-sm-12'>
+                        <label for='Download'>Step 01: File excel template: </label>
+                        <a href="@Commsights.Data.Helpers.AppGlobal.URLDownloadExcel/ReportMonthly.xlsx" target="_blank">Download</a>
+                    </div>
+                    <div class='col-sm-12'>
+                        <label for='Ten'>Step 02: Select the excel file include data: </label>
+                        @(Html.Kendo().Upload()
+                                  .Name("UploadAndiSource")
+                            )
+                    </div>
+                    <div class='col-sm-12'>
+                        <label for='CompanyID'>Step 03: Select industry: </label>
+                        @(Html.Kendo().DropDownListFor(Model => Model.IndustryID)
+                           .DataValueField("ID")
+                           .DataTextField("CodeName")
+                           .HtmlAttributes(new { style = "width:100%;" })                          
+                          .Filter(FilterType.StartsWith)
+                           .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetIndustryToList", "Config")))
+                                )
+                    </div>
+                    <div class='col-sm-12'>
+                        <label for='CompanyID'>Step 04: Select customer: </label>
+                        @(Html.Kendo().DropDownListFor(Model => Model.CompanyID)
+                           .DataValueField("ID")
+                           .DataTextField("Account")
+                           .HtmlAttributes(new { style = "width:100%;" })                          
+                          .Filter(FilterType.StartsWith)
+                           .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetCustomerFullToList", "Membership")))
+                                )
+                    </div>
+                    <div class='col-sm-12'>
+                        <label for='CompanyID'>Step 05: Select year + month: </label>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:50%;">
+                                    @(Html.Kendo().DropDownListFor(Model => Model.Year)
+                     .DataValueField("Display")
+                     .DataTextField("Display")
+                     .HtmlAttributes(new { @class = "form-control" })
+                     .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetYearFinanceToList", "AppGlobal")))
+                            )
+                                </td>
+                                <td style="width:50%;">
+
+                                    @(Html.Kendo().DropDownListFor(Model => Model.Month)
+                     .DataValueField("Display")
+                     .DataTextField("Display")
+                     .HtmlAttributes(new { @class = "form-control" })
+                     .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetMonthFinanceToList", "AppGlobal")))
+                            )
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class='col-sm-12'>
+                        <button class="btn btn-primary"><span class="fas fa-upload"></span> Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@(Html.Kendo().Notification()
+    .Name("Notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Width(400)
+)
+<script>
+    function onUpdatePressList() {
+        BeginRequestHandler();
+        $.ajax(
+            {
+                type: "POST",
+                datatype: "JSON",
+                url: '@Url.Action("UpdatePressList", "Permission")',
+                data: {  },
+                success: function (result) {
+                    EndRequestHandler();
+                    var messageType = result.split('-')[0];
+                    var note = result.split('-')[1];
+                    var notification = $("#Notification").data("kendoNotification");
+                    notification.show(note, messageType);
+                },
+                error: function (jqXHR, exception) { },
+                complete: function () { },
+            });
+    }
+    function onUpdateWebsiteList() {
+        BeginRequestHandler();
+        $.ajax(
+            {
+                type: "POST",
+                datatype: "JSON",
+                url: '@Url.Action("UpdateWebsiteList", "Permission")',
+                data: {  },
+                success: function (result) {
+                    EndRequestHandler();
+                    var messageType = result.split('-')[0];
+                    var note = result.split('-')[1];
+                    var notification = $("#Notification").data("kendoNotification");
+                    notification.show(note, messageType);
+                },
+                error: function (jqXHR, exception) { },
+                complete: function () { },
+            });
+    }
+    function onUpdateProduct() {
+        BeginRequestHandler();
+        $.ajax(
+            {
+                type: "POST",
+                datatype: "JSON",
+                url: '@Url.Action("UpdateProduct", "Permission")',
+                data: {  },
+                success: function (result) {
+                    EndRequestHandler();
+                    var messageType = result.split('-')[0];
+                    var note = result.split('-')[1];
+                    var notification = $("#Notification").data("kendoNotification");
+                    notification.show(note, messageType);
+                },
+                error: function (jqXHR, exception) { },
+                complete: function () { },
+            });
+    }
+    function onCreateWebsiteScan() {
+        BeginRequestHandler();
+        $.ajax(
+            {
+                type: "POST",
+                datatype: "JSON",
+                url: '@Url.Action("CreateWebsiteScan", "Permission")',
+                data: {  },
+                success: function (result) {
+                    EndRequestHandler();
+                    var messageType = result.split('-')[0];
+                    var note = result.split('-')[1];
+                    var notification = $("#Notification").data("kendoNotification");
+                    notification.show(note, messageType);
+                },
+                error: function (jqXHR, exception) { },
+                complete: function () { },
+            });
+    }
+    function onUpdateAndi() {
+        BeginRequestHandler();
+        $.ajax(
+            {
+                type: "POST",
+                datatype: "JSON",
+                url: '@Url.Action("UpdateAndi", "Permission")',
+                data: {  },
+                success: function (result) {
+                    EndRequestHandler();
+                    var messageType = result.split('-')[0];
+                    var note = result.split('-')[1];
+                    var notification = $("#Notification").data("kendoNotification");
+                    notification.show(note, messageType);
+                },
+                error: function (jqXHR, exception) { },
+                complete: function () { },
+            });
+    }
+</script>
