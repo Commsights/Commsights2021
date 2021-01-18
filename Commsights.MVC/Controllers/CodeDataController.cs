@@ -117,7 +117,15 @@ namespace Commsights.MVC.Controllers
             CodeDataViewModel model = new CodeDataViewModel();
             model.DatePublishBegin = DateTime.Now;
             model.DatePublishEnd = DateTime.Now;
-            model.IndustryID = AppGlobal.IndustryID;
+            return View(model);
+        }
+        public IActionResult SearchStatisticalDetail(string dateBegin, string dateEnd, int industryID, int employeeID)
+        {
+            CodeDataViewModel model = new CodeDataViewModel();
+            model.DatePublishBegin = DateTime.Parse(dateBegin);
+            model.DatePublishEnd = DateTime.Parse(dateEnd);
+            model.IndustryID = industryID;
+            model.EmployeeID = employeeID;
             return View(model);
         }
         public IActionResult Employee()
@@ -1940,7 +1948,11 @@ namespace Commsights.MVC.Controllers
                         }
                     }
                     model.RowNext = 0;
-                    List<CodeData> listIsCoding = list.Where(item => item.IsCoding == false || item.IsCoding == null).ToList();
+                    List<CodeData> listIsCoding = list.Where(item => item.ProductParentID == model.ProductParentID && (item.IsCoding == false || item.IsCoding == null)).ToList();
+                    if (listIsCoding.Count == 0)
+                    {
+                        listIsCoding = list.Where(item => item.IsCoding == false || item.IsCoding == null).ToList();
+                    }
                     if (listIsCoding.Count > 0)
                     {
                         model.RowNext = listIsCoding[0].ProductPropertyID;

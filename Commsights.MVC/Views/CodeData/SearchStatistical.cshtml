@@ -1,7 +1,7 @@
 ﻿@{ ViewData["Title"] = "Search statistical"; }
 
 @model Commsights.MVC.Models.CodeDataViewModel
-
+@Html.HiddenFor(Model => Model.IndustryID)
 
 <div class="row">
     <div class="col-md-12">
@@ -25,15 +25,6 @@
                                      .DateInput()
                                 )
                     </div>
-                    <div class='col-sm-4'>
-                        @(Html.Kendo().DropDownListFor(Model=>Model.IndustryID)
-                         .DataValueField("ID")
-                         .DataTextField("CodeName")
-                        .HtmlAttributes(new { @class = "form-control" })
-                           .Filter(FilterType.StartsWith)
-                         .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetIndustryToList", "Config")))
-                            )
-                    </div>
                     <div class='col-sm-1'>
                         <button type="button" class="btn btn-success" title="Search" onclick="onSearch()">
                             <span class="fas fa-search"></span>
@@ -41,16 +32,63 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class='col-sm-6'>
+                    <div class='col-sm-5'>
                         @(Html.Kendo().Grid<Commsights.Data.DataTransferObject.BaiVietReport>()
                             .Name("BaiVietReport")
                              .Columns(columns =>
                              {
-                                 columns.Bound(t => t.EmployeeID).Title("ID").Width(50);
-                                 columns.Bound(t => t.Employee).Title("Employee").Width(150);
-                                 columns.Bound(t => t.BaiVietSum).Title("Sum").Width(100).HtmlAttributes(new { @class = "text-right", @style = "font-weight: bold;" });
-                                 columns.Bound(t => t.BaiVietDuplicate).Title("Duplicate").Width(100).HtmlAttributes(new { @class = "text-right text-danger", @style = "font-weight: bold;" });
-                                 columns.Bound(t => t.BaiVietExtant).Title("Extant").Width(100).HtmlAttributes(new { @class = "text-right text-success" });
+                                 columns.Select();
+                                 columns.Bound(t => t.IndustryID).Title("ID");
+                                 columns.Bound(t => t.IndustryName).Title("Industry");
+                                 columns.Bound(t => t.BaiVietSum).Title("Sum").HtmlAttributes(new { @class = "text-right", @style = "font-weight: bold;" });
+                             })
+                            .ToolBar(toolBar => toolBar.Search())
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Sortable()
+                            .Scrollable()
+                            .Reorderable(r => r.Columns(true))
+                            .Resizable(r => r.Columns(true))
+                            .Pageable(pageable => pageable
+                            .Refresh(true)
+                            .PageSizes(true)
+                            .ButtonCount(10))
+                            .Excel(excel => excel
+                            .FileName("Config.xlsx")
+                            .Filterable(true)
+                            .ProxyURL(Url.Action("ExportExcel", "Config"))
+                            )
+                            .Pdf(pdf => pdf
+                            .AllPages()
+                            .AvoidLinks()
+                            .PaperSize("A4")
+                            .Margin("2cm", "1cm", "1cm", "1cm")
+                            .Landscape()
+                            .RepeatHeaders()
+                            .FileName("Config.pdf")
+                            )
+                            .HtmlAttributes(new { @class = "KendoGrid", @style = "font-size:11px;" })
+                            .Search(search => { search.Field(f => f.IndustryName);})
+                            .Events(ev => ev.Change("onBaiVietReportGridChange"))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(1000)
+                            .Model(model =>
+                            {
+                                model.Id(t => t.IndustryID);
+                            })
+                            .Read(t => t.Action("GetReportIndustryByDateBeginAndDateEndToList", "BaiVietUploadCount").Data("filterBaiVietReport"))
+                            )
+                            )
+                    </div>
+                    <div class='col-sm-7'>
+                        @(Html.Kendo().Grid<Commsights.Data.DataTransferObject.BaiVietReport>()
+                            .Name("BaiVietReportEmployee")
+                             .Columns(columns =>
+                             {                                 
+                                 columns.Template(@"<a target='_blank' href='#=URLEmployee#' title='#=URLEmployee#' style='color:blue; cursor: pointer; font-size: 11px;'>#=Employee#</a>").Title("Employee");                                 
+                                 columns.Bound(t => t.BaiVietSum).Title("Sum").HtmlAttributes(new { @class = "text-right", @style = "font-weight: bold;" });
+                                 columns.Bound(t => t.BaiVietDuplicate).Title("Duplicate").HtmlAttributes(new { @class = "text-right text-danger", @style = "font-weight: bold;" });
+                                 columns.Bound(t => t.BaiVietExtant).Title("Extant").HtmlAttributes(new { @class = "text-right text-success", @style = "font-weight: bold;" });
                              })
                             .ToolBar(toolBar => toolBar.Search())
                             .Editable(editable => editable.Mode(GridEditMode.InLine))
@@ -85,11 +123,9 @@
                             {
                                 model.Id(t => t.EmployeeID);
                             })
-                            .Read(t => t.Action("GetReportByDateBeginAndDateEndAndIndustryIDToList", "BaiVietUploadCount").Data("filterBaiVietReport"))
+                            .Read(t => t.Action("GetReportByDateBeginAndDateEndAndIndustryIDToList", "BaiVietUploadCount").Data("filterBaiVietReportEmployee"))
                             )
                             )
-                    </div>
-                    <div class='col-sm-6'>
                     </div>
                 </div>
             </div>
@@ -107,10 +143,20 @@
     function onSearch() {
         $("#BaiVietReport").data("kendoGrid").dataSource.read();
     }
+
     function filterBaiVietReport(e) {
         var dateBeginValue = toDate02($("#DatePublishBegin").val());
         var dateEndValue = toDate02($("#DatePublishEnd").val());
-        var industryIDValue = $("#IndustryID").data("kendoDropDownList").value();
+        return { dateBegin: dateBeginValue, dateEnd: dateEndValue };
+    }
+    function onBaiVietReportGridChange(arg) {
+        $("#IndustryID").val(this.selectedKeyNames().join(";"));
+        $("#BaiVietReportEmployee").data("kendoGrid").dataSource.read();
+    }
+    function filterBaiVietReportEmployee(e) {
+        var dateBeginValue = toDate02($("#DatePublishBegin").val());
+        var dateEndValue = toDate02($("#DatePublishEnd").val());
+        var industryIDValue = $("#IndustryID").val();
         return { dateBegin: dateBeginValue, dateEnd: dateEndValue, industryID: industryIDValue };
     }
 </script>

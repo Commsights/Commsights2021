@@ -1,0 +1,91 @@
+﻿@{ ViewData["Title"] = "Search detail"; }
+
+@model Commsights.MVC.Models.CodeDataViewModel
+
+@Html.HiddenFor(Model => Model.DatePublishBegin)
+@Html.HiddenFor(Model => Model.DatePublishEnd)
+@Html.HiddenFor(Model => Model.IndustryID)
+@Html.HiddenFor(Model => Model.EmployeeID)
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Code - Search detail</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class='col-sm-12'>
+                        @(Html.Kendo().Grid<Commsights.Data.DataTransferObject.BaiVietReport>()
+                            .Name("BaiVietReport")
+                             .Columns(columns =>
+                             {
+                                 columns.Template(@"<a target='_blank' href='#=URLCode#' title='#=Title#' class='btn btn-success' style='color:white; cursor: pointer; font-size: 11px; height:30px;'><i class='fas fa-external-link-alt'></i></a>").Title("View").Width(70).Locked(true);
+                                 columns.Bound(t => t.IsDuplicate).Title("Duplicate").Width(100).HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                 columns.Bound(t => t.Title).Title("Title").Width(200).HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                 columns.Bound(t => t.MediaTitle).Title("MediaTitle").Width(200).HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                 columns.Bound(t => t.Tier).Title("Tier").Width(100).HtmlAttributes(new { @style = "white-space: nowrap;" });
+                                 columns.Bound(t => t.URLCode).Title("URL").Width(200).HtmlAttributes(new { @style = "white-space: nowrap;" });
+                             })
+                            .ToolBar(toolBar => toolBar.Search())
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Sortable()
+                            .Scrollable()
+                            .Reorderable(r => r.Columns(true))
+                            .Resizable(r => r.Columns(true))
+                            .Pageable(pageable => pageable
+                            .Refresh(true)
+                            .PageSizes(true)
+                            .ButtonCount(10))
+                            .Excel(excel => excel
+                            .FileName("Config.xlsx")
+                            .Filterable(true)
+                            .ProxyURL(Url.Action("ExportExcel", "Config"))
+                            )
+                            .Pdf(pdf => pdf
+                            .AllPages()
+                            .AvoidLinks()
+                            .PaperSize("A4")
+                            .Margin("2cm", "1cm", "1cm", "1cm")
+                            .Landscape()
+                            .RepeatHeaders()
+                            .FileName("Config.pdf")
+                            )
+                            .HtmlAttributes(new { @class = "KendoGrid", @style = "font-size:11px;" })
+                            .Search(search => { search.Field(f => f.URLCode); search.Field(f => f.Title); search.Field(f => f.MediaTitle); search.Field(f => f.Tier); } )
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(1000)
+                            .Model(model =>
+                            {
+                                model.Id(t => t.URLCode);
+                            })
+                            .Read(t => t.Action("GetReportByDateBeginAndDateEndAndIndustryIDAndEmployeeIDToList", "BaiVietUploadCount").Data("filterBaiVietReport"))
+                            )
+                            )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@(Html.Kendo().Notification()
+    .Name("Notification")
+    .Position(p => p.Pinned(true).Top(30).Right(30))
+    .Width(400)
+)
+<script>
+    jQuery(function ($) {
+        console.log($("#DatePublishBegin").val());
+        console.log($("#DatePublishEnd").val());
+        $("#BaiVietReport").data("kendoGrid").dataSource.read();
+    });
+    function filterBaiVietReport(e) {
+        var dateBeginStringValue = $("#DatePublishBegin").val();
+        var dateEndStringValue = $("#DatePublishEnd").val();
+        var industryIDValue = $("#IndustryID").val();
+        var employeeIDValue = $("#EmployeeID").val();
+        return { dateBeginString: dateBeginStringValue, dateEndString: dateEndStringValue, industryID: industryIDValue, employeeID: employeeIDValue };
+    }
+</script>
+

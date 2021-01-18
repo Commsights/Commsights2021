@@ -20,6 +20,53 @@ namespace Commsights.Data.Repositories
         {
             _context = context;
         }
+        public List<BaiVietReport> GetReportByDateBeginAndDateEndAndIndustryIDAndEmployeeIDToList(DateTime dateBegin, DateTime dateEnd, int industryID, int employeeID)
+        {
+            List<BaiVietReport> list = new List<BaiVietReport>();
+            if (industryID > 0)
+            {
+                try
+                {
+                    dateBegin = new DateTime(dateBegin.Year, dateBegin.Month, dateBegin.Day, 0, 0, 0);
+                    dateEnd = new DateTime(dateEnd.Year, dateEnd.Month, dateEnd.Day, 23, 59, 59);
+                    SqlParameter[] parameters =
+                    {
+                    new SqlParameter("@DateBegin",dateBegin),
+                    new SqlParameter("@DateEnd",dateEnd),
+                    new SqlParameter("@IndustryID",industryID),
+                    new SqlParameter("@EmployeeID",employeeID),
+                    };
+                    DataTable dt = SQLHelper.Fill(AppGlobal.ConectionString, "sp_BaiVietUploadReportByDateBeginAndDateEndAndIndustryIDAndEmployeeID", parameters);
+                    list = SQLHelper.ToList<BaiVietReport>(dt);
+                }
+                catch (Exception e)
+                {
+                    string mes = e.Message;
+                }
+            }
+            return list;
+        }
+        public List<BaiVietReport> GetReportIndustryByDateBeginAndDateEndToList(DateTime dateBegin, DateTime dateEnd)
+        {
+            List<BaiVietReport> list = new List<BaiVietReport>();
+            try
+            {
+                dateBegin = new DateTime(dateBegin.Year, dateBegin.Month, dateBegin.Day, 0, 0, 0);
+                dateEnd = new DateTime(dateEnd.Year, dateEnd.Month, dateEnd.Day, 23, 59, 59);
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@DateBegin",dateBegin),
+                    new SqlParameter("@DateEnd",dateEnd),
+                    };
+                DataTable dt = SQLHelper.Fill(AppGlobal.ConectionString, "sp_BaiVietUploadReportIndustryByDateBeginAndDateEnd", parameters);
+                list = SQLHelper.ToList<BaiVietReport>(dt);
+            }
+            catch (Exception e)
+            {
+                string mes = e.Message;
+            }
+            return list;
+        }
         public List<BaiVietReport> GetReportByDateBeginAndDateEndToList(DateTime dateBegin, DateTime dateEnd)
         {
             List<BaiVietReport> list = new List<BaiVietReport>();
