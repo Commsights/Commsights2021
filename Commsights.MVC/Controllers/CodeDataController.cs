@@ -3356,7 +3356,12 @@ namespace Commsights.MVC.Controllers
                                 }
                                 if (i == 7)
                                 {
-                                    workSheet.Cells[row, i].Value = list[index].SentimentCorpVietnamese;
+                                    string sentimentCorpVietnamese = list[index].SentimentCorpVietnamese;
+                                    if (string.IsNullOrEmpty(sentimentCorpVietnamese))
+                                    {
+                                        sentimentCorpVietnamese = list[index].SentimentCorp;
+                                    }
+                                    workSheet.Cells[row, i].Value = sentimentCorpVietnamese;
                                     workSheet.Cells[row, i].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                 }
                                 if (i == 8)
