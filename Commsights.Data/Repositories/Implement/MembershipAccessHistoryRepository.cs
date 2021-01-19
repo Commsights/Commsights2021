@@ -62,7 +62,7 @@ namespace Commsights.Data.Repositories
                 SqlParameter[] parameters =
                 {
                     new SqlParameter("@MembershipID",membershipID),
-                    new SqlParameter("@Code",code),                
+                    new SqlParameter("@Code",code),
                     new SqlParameter("@Controller",controller),
                     new SqlParameter("@Action",action),
                 };
@@ -73,6 +73,24 @@ namespace Commsights.Data.Repositories
                 }
             }
             return item;
+        }
+        public List<MembershipAccessHistory> GetByDateBeginAndDateEndAndMembershipIDToList(DateTime dateBegin, DateTime dateEnd, int membershipID)
+        {
+            List<MembershipAccessHistory> list = new List<MembershipAccessHistory>();
+            if (membershipID > 0)
+            {
+                dateBegin = new DateTime(dateBegin.Year, dateBegin.Month, dateBegin.Day, 0, 0, 0);
+                dateEnd = new DateTime(dateEnd.Year, dateEnd.Month, dateEnd.Day, 23, 59, 59);
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@DateBegin",dateBegin),
+                    new SqlParameter("@DateEnd",dateEnd),
+                    new SqlParameter("@MembershipID",membershipID),
+                };
+                DataTable dt = SQLHelper.Fill(AppGlobal.ConectionString, "sp_MembershipAccessHistoryByDateBeginAndDateEndAndMembershipID", parameters);
+                list = SQLHelper.ToList<MembershipAccessHistory>(dt);
+            }
+            return list;
         }
     }
 }

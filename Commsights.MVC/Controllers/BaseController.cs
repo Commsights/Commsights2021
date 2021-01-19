@@ -64,7 +64,7 @@ namespace Commsights.MVC.Controllers
                 {
                     if (IsUserAllow(controller, action, queryString) == false)
                     {
-                        context.Result = new RedirectResult("/Home/Index");
+                        context.Result = new RedirectResult("/Membership/EmployeeInfo");
                     }
                 }
                 else

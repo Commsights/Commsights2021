@@ -11,7 +11,7 @@
 .Name("Config")
 .Columns(columns =>
 {
-    columns.Command(command => { command.Edit().Text("&nbsp;").CancelText("&nbsp;").UpdateText("&nbsp;").IconClass("fas fa-edit").HtmlAttributes(new { style = "font-size: 16px; padding-left:16px; padding-top:6px; border-radius: 6px; font-weight:bold; width:50px;" }); command.Destroy().Text("&nbsp;").IconClass("fas fa-trash-alt").HtmlAttributes(new { style = "font-size: 16px; color:#ffffff; background-color:#d73925; padding-left:16px; padding-top:6px; border-radius: 6px; width:50px;" }); }).Width(120);
+    columns.Command(command => { command.Edit().Text("&nbsp;").CancelText("&nbsp;").UpdateText("&nbsp;").IconClass("fas fa-edit").HtmlAttributes(new { style = "font-size: 11px; padding-left:16px; padding-top:6px; border-radius: 6px; font-weight:bold; width:50px;" }); command.Destroy().Text("&nbsp;").IconClass("fas fa-trash-alt").HtmlAttributes(new { style = "font-size: 16px; color:#ffffff; background-color:#d73925; padding-left:16px; padding-top:6px; border-radius: 6px; width:50px;" }); }).Width(150);
     columns.Bound(t => t.ID).Title("ID").Width(70).HtmlAttributes(new { @class = "text-right" });
     columns.Bound(t => t.ParentID).Title("ParentID").Width(70).HtmlAttributes(new { @class = "text-right" });
     columns.Bound(t => t.CodeName).Title("Display").Width(150);
@@ -47,7 +47,7 @@
 .RepeatHeaders()
 .FileName("Config.pdf")
 )
-.HtmlAttributes(new { @class = "KendoGrid", @style="font-size:12px;" })
+.HtmlAttributes(new { @class = "KendoGrid", @style="font-size:11px;" })
 .Search(search => { search.Field(f => f.Title); search.Field(f => f.Icon); search.Field(f => f.Controller); search.Field(f => f.Action); })
 .DataSource(dataSource => dataSource
 .Ajax()

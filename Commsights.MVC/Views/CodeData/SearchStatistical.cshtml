@@ -84,8 +84,8 @@
                         @(Html.Kendo().Grid<Commsights.Data.DataTransferObject.BaiVietReport>()
                             .Name("BaiVietReportEmployee")
                              .Columns(columns =>
-                             {                                 
-                                 columns.Template(@"<a target='_blank' href='#=URLEmployee#' title='#=URLEmployee#' style='color:blue; cursor: pointer; font-size: 11px;'>#=Employee#</a>").Title("Employee");                                 
+                             {
+                                 columns.Template(@"<a target='_blank' href='#=URLEmployee#' title='#=URLEmployee#' style='color:blue; cursor: pointer; font-size: 11px;'>#=Employee#</a>").Title("Employee");
                                  columns.Bound(t => t.BaiVietSum).Title("Sum").HtmlAttributes(new { @class = "text-right", @style = "font-weight: bold;" });
                                  columns.Bound(t => t.BaiVietDuplicate).Title("Duplicate").HtmlAttributes(new { @class = "text-right text-danger", @style = "font-weight: bold;" });
                                  columns.Bound(t => t.BaiVietExtant).Title("Extant").HtmlAttributes(new { @class = "text-right text-success", @style = "font-weight: bold;" });

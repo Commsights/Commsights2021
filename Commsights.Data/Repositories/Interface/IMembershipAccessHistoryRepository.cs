@@ -10,5 +10,6 @@ namespace Commsights.Data.Repositories
         public List<Config> GetMenuSelectByMembershipIDAndCodeAndIsMenuLeftToList(int membershipID, string code, bool isMenuLeft);
         public Config GetMenuSelectByMembershipIDAndCodeAndIsViewAndControllerAndActionToList(int membershipID, string code, bool isView, string controller, string action);
         public Config GetMenuSelectByMembershipIDAndCodeAndControllerAndActionToList(int membershipID, string code, string controller, string action);
+        public List<MembershipAccessHistory> GetByDateBeginAndDateEndAndMembershipIDToList(DateTime dateBegin, DateTime dateEnd, int membershipID);
     }
 }
