@@ -1782,23 +1782,26 @@ namespace Commsights.MVC.Controllers
             string actionMessage = "";
             if ((!string.IsNullOrEmpty(model.TitleProperty)) && (model.SourceProperty > 0))
             {
-                _productPropertyRepository.Delete(model.ProductPropertyID.Value);
                 List<ProductProperty> list = _productPropertyRepository.GetTitleAndSourceToList(model.TitleProperty, model.SourceProperty.Value);
-                foreach (ProductProperty productProperty in list)
+                if (list.Count > 0)
                 {
-                    productProperty.ID = 0;
-                    productProperty.TitleProperty = model.TitleProperty;
-                    productProperty.SourceProperty = model.SourceProperty;
-                    productProperty.FileName = "";
-                    productProperty.MediaTitle = "";
-                    productProperty.MediaType = "";
-                    productProperty.ParentID = model.ProductID;
-                    productProperty.Source = model.Source;
-                    productProperty.IsCoding = true;
-                    productProperty.DateCoding = DateTime.Now;
-                    productProperty.Initialization(InitType.Insert, RequestUserID);
-                    _productPropertyRepository.Create(productProperty);
-                    model.ProductPropertyID = productProperty.ID;
+                    foreach (ProductProperty productProperty in list)
+                    {
+                        productProperty.ID = 0;
+                        productProperty.TitleProperty = model.TitleProperty;
+                        productProperty.SourceProperty = model.SourceProperty;
+                        productProperty.FileName = "";
+                        productProperty.MediaTitle = "";
+                        productProperty.MediaType = "";
+                        productProperty.ParentID = model.ProductID;
+                        productProperty.Source = model.Source;
+                        productProperty.IsCoding = true;
+                        productProperty.DateCoding = DateTime.Now;
+                        productProperty.Initialization(InitType.Insert, RequestUserID);
+                        _productPropertyRepository.Create(productProperty);
+                        model.ProductPropertyID = productProperty.ID;
+                    }
+                    //_productPropertyRepository.Delete(model.ProductPropertyID.Value);
                 }
             }
             else
@@ -1909,26 +1912,18 @@ namespace Commsights.MVC.Controllers
                     datePublishBegin = DateTime.Parse(Request.Cookies["CodeDataDatePublishBegin"]);
                     datePublishEnd = DateTime.Parse(Request.Cookies["CodeDataDatePublishEnd"]);
                     string codeDataAction = Request.Cookies["CodeDataAction"];
-                    List<CodeData> list = new List<CodeData>();
+                    List<CodeData0001> list = new List<CodeData0001>();
                     switch (codeDataAction)
                     {
                         case "1":
-                            list = _codeDataRepository.GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeIDToList(datePublishBegin, datePublishEnd, industryID, RequestUserID);
+                            list = _codeDataRepository.GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeID0001ToList(datePublishBegin, datePublishEnd, industryID, RequestUserID);
                             break;
                         case "2":
-                            list = _codeDataRepository.GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeIDAndSourceIsNewspageAndTVToList(datePublishBegin, datePublishEnd, industryID, RequestUserID, AppGlobal.Newspage, AppGlobal.TV);
+                            list = _codeDataRepository.GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeIDAndSourceIsNewspageAndTV0001ToList(datePublishBegin, datePublishEnd, industryID, RequestUserID, AppGlobal.Newspage, AppGlobal.TV);
                             break;
                         case "3":
-                            list = _codeDataRepository.GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeIDAndSourceIsNotNewspageAndTVToList(datePublishBegin, datePublishEnd, industryID, RequestUserID, AppGlobal.Newspage, AppGlobal.TV);
+                            list = _codeDataRepository.GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeIDAndSourceIsNotNewspageAndTV0001ToList(datePublishBegin, datePublishEnd, industryID, RequestUserID, AppGlobal.Newspage, AppGlobal.TV);
                             break;
-                    }
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        if (productPropertyID == list[i].ProductPropertyID)
-                        {
-                            model = list[i];
-                            i = list.Count;
-                        }
                     }
                     if ((model == null) || (string.IsNullOrEmpty(model.Title)))
                     {
@@ -1948,7 +1943,7 @@ namespace Commsights.MVC.Controllers
                         }
                     }
                     model.RowNext = 0;
-                    List<CodeData> listIsCoding = list.Where(item => item.ProductParentID == model.ProductParentID && (item.IsCoding == false || item.IsCoding == null)).ToList();
+                    List<CodeData0001> listIsCoding = list.Where(item => item.ProductID == model.ProductID && (item.IsCoding == false || item.IsCoding == null)).ToList();
                     if (listIsCoding.Count == 0)
                     {
                         listIsCoding = list.Where(item => item.IsCoding == false || item.IsCoding == null).ToList();

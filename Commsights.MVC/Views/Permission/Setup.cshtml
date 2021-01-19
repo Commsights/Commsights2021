@@ -55,7 +55,35 @@
         </div>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Copy Property</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class='form-group'>
+                            <label for='ProductIDCopy'>ProductID Copy</label>
+                            <input id="ProductIDCopy" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class='form-group'>
+                            <label for='PropertyIDListSource'>PropertyID List Source (;)</label>
+                            <input id="PropertyIDListSource" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <label for='PropertyIDCopy'>Copy</label>
+                        <a id="PropertyIDCopy" onclick="onInsertItemsByProductIDCopyAndPropertyIDListSource()" title='Copy' class='btn btn-primary' style='color:white; cursor: pointer;'><span class="fas fa-save"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <div class="card card-primary">
@@ -79,7 +107,7 @@
                         @(Html.Kendo().DropDownListFor(Model => Model.IndustryID)
                            .DataValueField("ID")
                            .DataTextField("CodeName")
-                           .HtmlAttributes(new { style = "width:100%;" })                          
+                           .HtmlAttributes(new { style = "width:100%;" })
                           .Filter(FilterType.StartsWith)
                            .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetIndustryToList", "Config")))
                                 )
@@ -89,7 +117,7 @@
                         @(Html.Kendo().DropDownListFor(Model => Model.CompanyID)
                            .DataValueField("ID")
                            .DataTextField("Account")
-                           .HtmlAttributes(new { style = "width:100%;" })                          
+                           .HtmlAttributes(new { style = "width:100%;" })
                           .Filter(FilterType.StartsWith)
                            .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetCustomerFullToList", "Membership")))
                                 )
@@ -217,6 +245,30 @@
                 datatype: "JSON",
                 url: '@Url.Action("UpdateAndi", "Permission")',
                 data: {  },
+                success: function (result) {
+                    EndRequestHandler();
+                    var messageType = result.split('-')[0];
+                    var note = result.split('-')[1];
+                    var notification = $("#Notification").data("kendoNotification");
+                    notification.show(note, messageType);
+                },
+                error: function (jqXHR, exception) { },
+                complete: function () { },
+            });
+    }
+    function onInsertItemsByProductIDCopyAndPropertyIDListSource() {
+        BeginRequestHandler();
+        var productIDCopyValue = $("#ProductIDCopy").val();
+        var propertyIDListSourceValue = $("#PropertyIDListSource").val();
+        $.ajax(
+            {
+                type: "POST",
+                datatype: "JSON",
+                url: '@Url.Action("InsertItemsByProductIDCopyAndPropertyIDListSource", "ProductProperty")',
+                data: {
+                    productIDCopy: productIDCopyValue,
+                    propertyIDListSource: propertyIDListSourceValue,
+                },
                 success: function (result) {
                     EndRequestHandler();
                     var messageType = result.split('-')[0];

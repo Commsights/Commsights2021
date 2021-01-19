@@ -628,7 +628,21 @@ namespace Commsights.MVC.Controllers
             }
             return Json(note);
         }
-
+        public IActionResult InsertItemsByProductIDCopyAndPropertyIDListSource(int productIDCopy, string propertyIDListSource)
+        {
+            _productPropertyRepository.InsertItemsByProductIDCopyAndPropertyIDListSource(productIDCopy, propertyIDListSource);
+            string note = AppGlobal.InitString;
+            int result = 1;
+            if (result > 0)
+            {
+                note = AppGlobal.Success + " - " + AppGlobal.EditSuccess;
+            }
+            else
+            {
+                note = AppGlobal.Error + " - " + AppGlobal.EditFail;
+            }
+            return Json(note);
+        }
         public IActionResult ScanFilesCopyProductPropertyAndProduct(int productPropertyID, int productID)
         {
             Product product = _productRepository.GetByID(productID);

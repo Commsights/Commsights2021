@@ -617,5 +617,20 @@ new SqlParameter("@Title",model.Title),
             }
             return result;
         }
+        public string InsertItemsByProductIDCopyAndPropertyIDListSource(int productIDCopy, string propertyIDListSource)
+        {
+            string result = "";
+            propertyIDListSource = propertyIDListSource.Replace(@",", @";");
+            if (!string.IsNullOrEmpty(propertyIDListSource))
+            {
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@ProductIDCopy",productIDCopy),
+                new SqlParameter("@PropertyIDListSource",propertyIDListSource),
+                };
+                result = SQLHelper.ExecuteNonQuery(AppGlobal.ConectionString, "sp_ProductPropertyInsertItemsByProductIDCopyAndPropertyIDListSource", parameters);
+            }
+            return result;
+        }
     }
 }

@@ -150,6 +150,7 @@
                 productID: productProperty.ProductID,
             },
             success: function () {
+                onSearch();
                 EndRequestHandler();
             }
             }).done(() => {
