@@ -52,5 +52,6 @@ namespace Commsights.Data.Models
         public bool? IsFilter { get; set; }
         public int? Advalue { get; set; }
         public string TitleProperty { get; set; }
+        public bool? IsPriority { get; set; }
     }
 }

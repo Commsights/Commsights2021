@@ -317,7 +317,7 @@ namespace Commsights.MVC.Controllers
             {
                 check = check + 1;
             }
-            if ((fileExtension == "mp4") || (fileExtension == "wmv"))
+            if ((fileExtension == "mp3") || (fileExtension == "mp4") || (fileExtension == "wmv"))
             {
                 if (!string.IsNullOrEmpty(timeLine))
                 {
@@ -343,7 +343,7 @@ namespace Commsights.MVC.Controllers
 
                 if (listProductProperty.Count > 0)
                 {
-                    if ((fileExtension == "mp4") || (fileExtension == "wmv"))
+                    if ((fileExtension == "mp3") || (fileExtension == "mp4") || (fileExtension == "wmv"))
                     {
                         model.IsVideo = true;
                         model.Image = listProductProperty[0].Note;
@@ -419,7 +419,7 @@ namespace Commsights.MVC.Controllers
                     }
                     if (model.ID > 0)
                     {
-                        model.URLCode = AppGlobal.DomainMain + "Product/ViewContent/" + model.ID;
+                        model.URLCode = AppGlobal.DomainMainCRM + "Product/ViewContent/" + model.ID;
                         _productRepository.Update(model.ID, model);
                         ProductProperty productProperty = new ProductProperty();
                         productProperty.Initialization(InitType.Insert, RequestUserID);
@@ -447,7 +447,7 @@ namespace Commsights.MVC.Controllers
             {
                 check = check + 1;
             }
-            if ((fileExtension == "mp4") || (fileExtension == "wmv"))
+            if ((fileExtension == "mp3") || (fileExtension == "mp4") || (fileExtension == "wmv"))
             {
                 if (!string.IsNullOrEmpty(timeLine))
                 {
@@ -472,7 +472,7 @@ namespace Commsights.MVC.Controllers
                 model.DatePublish = datePublish;
                 if (listProductProperty.Count > 0)
                 {
-                    if ((fileExtension == "mp4") || (fileExtension == "wmv"))
+                    if ((fileExtension == "mp3") || (fileExtension == "mp4") || (fileExtension == "wmv"))
                     {
                         model.Source = AppGlobal.TV;
                         model.IsVideo = true;
@@ -556,7 +556,7 @@ namespace Commsights.MVC.Controllers
                     }
                     if (model.ID > 0)
                     {
-                        model.URLCode = AppGlobal.DomainMain + "Product/ViewContent/" + model.ID;
+                        model.URLCode = AppGlobal.DomainMainCRM + "Product/ViewContent/" + model.ID;
                         _productRepository.Update(model.ID, model);
                         ProductProperty productProperty = new ProductProperty();
                         productProperty.Initialization(InitType.Insert, RequestUserID);
@@ -650,9 +650,12 @@ namespace Commsights.MVC.Controllers
             {
                 if (product.ID > 0)
                 {
+                    int productID001 = product.ID;
                     product.ID = 0;
                     product.Initialization(InitType.Insert, RequestUserID);
                     _productRepository.Create(product);
+                    product.URLCode = product.URLCode.Replace(productID001.ToString(), product.ID.ToString());
+                    _productRepository.Update(product.ID, product);
                     if (product.ID > 0)
                     {
                         ProductProperty productProperty = _productPropertyRepository.GetByID(productPropertyID);
@@ -664,6 +667,7 @@ namespace Commsights.MVC.Controllers
                                 productProperty.ParentID = product.ID;
                                 productProperty.Initialization(InitType.Insert, RequestUserID);
                                 _productPropertyRepository.Create(productProperty);
+
                             }
                         }
                     }

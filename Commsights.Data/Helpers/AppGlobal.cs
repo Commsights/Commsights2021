@@ -1490,7 +1490,14 @@ namespace Commsights.Data.Helpers
                 return builder.Build().GetSection("AppSettings").GetSection("DomainMain").Value;
             }
         }
-
+        public static string DomainMainCRM
+        {
+            get
+            {
+                var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                return builder.Build().GetSection("AppSettings").GetSection("DomainMainCRM").Value;
+            }
+        }
         public static string Domain
         {
             get

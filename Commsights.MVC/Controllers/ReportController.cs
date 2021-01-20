@@ -5001,12 +5001,37 @@ namespace Commsights.MVC.Controllers
                                                                     website.Initialization(InitType.Insert, RequestUserID);
                                                                     _configResposistory.Create(website);
                                                                 }
+                                                                model.IsPriority = baseViewModel.IsPriority;
                                                                 model.ParentID = website.ID;
                                                                 _productRepository.Create(model);
                                                                 product = model;
                                                             }
                                                             if (product.ID > 0)
                                                             {
+                                                                if (product.IsPriority == false)
+                                                                {
+                                                                    int checkInt = 0;
+                                                                    if (!string.IsNullOrEmpty(model.TitleEnglish))
+                                                                    {
+                                                                        product.TitleEnglish = model.TitleEnglish;
+                                                                        checkInt = checkInt + 1;
+                                                                    }
+                                                                    if (!string.IsNullOrEmpty(model.Description))
+                                                                    {
+                                                                        product.Description = model.Description;
+                                                                        checkInt = checkInt + 1;
+                                                                    }
+                                                                    if (!string.IsNullOrEmpty(model.Author))
+                                                                    {
+                                                                        product.Author = model.Author;
+                                                                        checkInt = checkInt + 1;
+                                                                    }
+                                                                    if (checkInt > 0)
+                                                                    {
+                                                                        product.Initialization(InitType.Insert, RequestUserID);
+                                                                        _productRepository.Update(product.ID, product);
+                                                                    }
+                                                                }
                                                                 int membershipPermissionProductID = 0;
                                                                 int membershipPermissionSegmentID = 0;
                                                                 if (workSheet.Cells[i, 10].Value != null)

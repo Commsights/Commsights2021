@@ -275,6 +275,9 @@
             case "wmv":
                 html = "<video width='100%' height='50%' controls><source src='" + productProperty.Note + "' type='video/mp4'></video>";
                 break;
+            case "mp3":            
+                html = "<audio width='100%' height='50%' controls><source src='" + productProperty.Note + "' type='audio/mpeg'></audio>";
+                break;
         }
         $("#DataMain").html('');
         html = $.parseHTML(html);

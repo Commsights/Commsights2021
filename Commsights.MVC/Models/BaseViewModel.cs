@@ -27,6 +27,7 @@ namespace Commsights.MVC.Models
         public bool IsUploadGoogleSearch001Override { get; set; }
         public bool IsUploadAndiSourceOverride { get; set; }
         public bool IsUploadYounetOverride { get; set; }
+        public bool IsPriority { get; set; }
         public bool AllData { get; set; }
         public bool AllSummary { get; set; }
         public DateTime DatePublishBegin { get; set; }

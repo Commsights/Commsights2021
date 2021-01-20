@@ -48,6 +48,10 @@
                         @(Html.CheckBoxFor(Model => Model.IsIndustryIDUploadGoogleSearch))
                         <label for='IsIndustryIDUploadScan'>Not select industry</label>
                     </div>
+                    <div class="col-md-12">
+                        @(Html.CheckBoxFor(Model => Model.IsPriority))
+                        <label for='Priority'>Priority</label>
+                    </div>
                     <div class='col-sm-12'>
                         <button class="btn btn-primary"><span class="fas fa-upload"></span> Upload</button>
                     </div>

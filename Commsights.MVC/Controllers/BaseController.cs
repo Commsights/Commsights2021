@@ -14,8 +14,7 @@ namespace Commsights.MVC.Controllers
 {
     public class BaseController : Controller, IActionFilter
     {
-        private readonly IMembershipAccessHistoryRepository _membershipAccessHistoryRepository;
-        private readonly IConfigRepository _configResposistory;
+        private readonly IMembershipAccessHistoryRepository _membershipAccessHistoryRepository;        
         public BaseController(IMembershipAccessHistoryRepository membershipAccessHistoryRepository)
         {
             _membershipAccessHistoryRepository = membershipAccessHistoryRepository;

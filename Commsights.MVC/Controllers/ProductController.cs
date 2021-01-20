@@ -150,7 +150,7 @@ namespace Commsights.MVC.Controllers
             return View(model);
         }
         public IActionResult ViewContent(int ID)
-        {
+        {            
             ProductViewContentViewModel model = new ProductViewContentViewModel();
             List<ProductProperty> listProductProperty = new List<ProductProperty>();
             if (ID > 0)
