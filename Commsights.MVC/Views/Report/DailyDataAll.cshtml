@@ -40,7 +40,7 @@
                                      .DateInput()
                                 )
                     </div>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-2'>
                         @(Html.Kendo().DropDownListFor(Model=>Model.IndustryID)
                      .DataValueField("ID")
                      .DataTextField("CodeName")
@@ -48,6 +48,10 @@
                        .Filter(FilterType.StartsWith)
                      .DataSource(dataSource => dataSource.Ajax().Read(t => t.Action("GetProductPermissionDistinctIndustryByEmployeeIDToList", "Config")))
                             )
+                    </div>
+                    <div class='col-sm-1' style="display:flex; justify-content:start; align-items:center;">
+                        <input id="IsUpload" type="checkbox" checked="checked">
+                        <p style="display:inline-block; font-size:14px; font-weight:bold; margin:0; padding-left:10px; margin-right:10px;">Up/Pub</p>
                     </div>
                     <div class='col-sm-1'>
                         <button type="button" class="btn btn-success" title="Search" onclick="onSearch()">
@@ -145,7 +149,7 @@
     model.Field(t => t.ProductPropertyID).Editable(false);
 })
 .Events(t => { t.RequestEnd("onGridRequestEnd"); })
-.Read(t => t.Action("GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDToList", "CodeData").Data("filterCodeData"))
+.Read(t => t.Action("GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList", "CodeData").Data("filterCodeData"))
 .Destroy(t => t.Action("DeleteProductPropertyByID", "CodeData"))
 .Update(t => t.Action("UpdateProduct", "CodeData"))
 ))
@@ -175,16 +179,20 @@
     }
     function onExcelVietnamese() {
         BeginRequestHandler();
-        var url = "/CodeData/Export001ExportExcelForDailyAllVietnamese";
-        window.location.replace(url);
-        EndRequestHandler();
+        var IDValue = $("#ID").val();
+        $.post("/CodeData/Export001ExportExcelForDailyAllVietnamese", {}, function (result) {
+            window.location.replace(result);
+            EndRequestHandler();
+        });
     }
     function onExcelEnglish() {
         BeginRequestHandler();
-        var url = "/CodeData/Export001ExportExcelForDailyAll";
-        window.location.replace(url);
-        EndRequestHandler();
-    }
+        var IDValue = $("#ID").val();
+        $.post("/CodeData/Export001ExportExcelForDailyAll", {}, function (result) {
+            window.location.replace(result);
+            EndRequestHandler();
+        });
+    }   
     function GetByIndustryIDAndParrentIDToList() {
         $("#DataMain").html('');
         var industryIDValue = $("#IndustryID").data("kendoDropDownList").value();
@@ -228,12 +236,13 @@
     }
 
     function filterCodeData(e) {
-        var dateUpdatedBeginValue = toDate02($("#DatePublishBegin").val());
-        var dateUpdatedEndValue = toDate02($("#DatePublishEnd").val());
+        var dateBeginValue = toDate02($("#DatePublishBegin").val());
+        var dateEndValue = toDate02($("#DatePublishEnd").val());
         var hourBeginValue = $("#HourBegin").data("kendoDropDownList").value();
         var hourEndValue = $("#HourEnd").data("kendoDropDownList").value();
         var industryIDValue = $("#IndustryID").data("kendoDropDownList").value();
-        return { dateUpdatedBegin: dateUpdatedBeginValue, dateUpdatedEnd: dateUpdatedEndValue, hourBegin: hourBeginValue, hourEnd: hourEndValue, industryID: industryIDValue };
+        var isUploadValue = document.getElementById('IsUpload').checked;
+        return { dateBegin: dateBeginValue, dateEnd: dateEndValue, hourBegin: hourBeginValue, hourEnd: hourEndValue, industryID: industryIDValue, isUpload: isUploadValue };
     }
 
 </script>

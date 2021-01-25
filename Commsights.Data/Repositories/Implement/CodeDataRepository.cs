@@ -525,6 +525,19 @@ namespace Commsights.Data.Repositories
             }
             return list;
         }
+        public List<CodeData> GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload)
+        {
+            List<CodeData> list = new List<CodeData>();
+            if (isUpload == true)
+            {
+                list = GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID);
+            }
+            else
+            {
+                list = GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID);
+            }
+            return list;
+        }
         public List<CodeData> GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID)
         {
             List<CodeData> list = new List<CodeData>();

@@ -2035,6 +2035,19 @@ namespace Commsights.MVC.Controllers
             List<CodeData> list = _codeDataRepository.GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDToList(dateUpdatedBegin, dateUpdatedEnd, hourBegin, hourEnd, industryID);
             return Json(list.ToDataSourceResult(request));
         }
+        public ActionResult GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList([DataSourceRequest] DataSourceRequest request, DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload)
+        {
+            var cookieExpires = new CookieOptions();
+            cookieExpires.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.Append("CodeDataDailyDateBegin", dateBegin.ToString("MM/dd/yyyy"), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyDateEnd", dateEnd.ToString("MM/dd/yyyy"), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyHourBegin", hourBegin.ToString(), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyHourEnd", hourEnd.ToString(), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyIndustryID", industryID.ToString(), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyIsUpload", isUpload.ToString(), cookieExpires);
+            List<CodeData> list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload);
+            return Json(list.ToDataSourceResult(request));
+        }
         public ActionResult GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDToList([DataSourceRequest] DataSourceRequest request, DateTime dateUpdatedBegin, DateTime dateUpdatedEnd, int hourBegin, int hourEnd, int industryID)
         {
             var cookieExpires = new CookieOptions();
@@ -2782,7 +2795,7 @@ namespace Commsights.MVC.Controllers
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
-        public IActionResult Export001ExportExcelForDailyAll(CancellationToken cancellationToken)
+        public string Export001ExportExcelForDailyAll(CancellationToken cancellationToken)
         {
             List<CodeData> list = new List<CodeData>();
             string excelName = @"Daily_" + AppGlobal.DateTimeCode + ".xlsx";
@@ -2790,12 +2803,13 @@ namespace Commsights.MVC.Controllers
             try
             {
                 string industryName = "";
-                DateTime dateUpdatedBegin = DateTime.Parse(Request.Cookies["CodeDataDailyDatePublishBegin"]);
-                DateTime dateUpdatedEnd = DateTime.Parse(Request.Cookies["CodeDataDailyDatePublishEnd"]);
+                DateTime dateBegin = DateTime.Parse(Request.Cookies["CodeDataDailyDateBegin"]);
+                DateTime dateEnd = DateTime.Parse(Request.Cookies["CodeDataDailyDateEnd"]);
                 int hourBegin = int.Parse(Request.Cookies["CodeDataDailyHourBegin"]);
                 int hourEnd = int.Parse(Request.Cookies["CodeDataDailyHourEnd"]);
                 int industryID = int.Parse(Request.Cookies["CodeDataDailyIndustryID"]);
-                list = _codeDataRepository.GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDToList(dateUpdatedBegin, dateUpdatedEnd, hourBegin, hourEnd, industryID);
+                bool isUpload = bool.Parse(Request.Cookies["CodeDataDailyIsUpload"]);
+                list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload);
                 Config industry = _configResposistory.GetByID(industryID);
                 if (industry != null)
                 {
@@ -2803,17 +2817,17 @@ namespace Commsights.MVC.Controllers
                 }
                 sheetName = industryName;
                 industryName = AppGlobal.SetName(industryName);
-                excelName = @"Daily_" + industryName + "_" + dateUpdatedBegin.ToString("yyyyMMdd") + "_" + dateUpdatedEnd.ToString("yyyyMMdd") + "_" + AppGlobal.DateTimeCode + ".xlsx";
+                excelName = @"Daily_" + industryName + "_" + dateBegin.ToString("yyyyMMdd") + "_" + dateEnd.ToString("yyyyMMdd") + "_" + AppGlobal.DateTimeCode + ".xlsx";
             }
             catch
             {
             }
-            var stream = new MemoryStream();
+            var streamExport = new MemoryStream();
             Color color = Color.FromArgb(int.Parse("#c00000".Replace("#", ""), System.Globalization.NumberStyles.AllowHexSpecifier));
             Color colorTitle = Color.FromArgb(int.Parse("#ed7d31".Replace("#", ""), System.Globalization.NumberStyles.AllowHexSpecifier));
             List<Config> listDailyReportColumn = _configResposistory.GetByGroupNameAndCodeToList(Commsights.Data.Helpers.AppGlobal.CRM, Commsights.Data.Helpers.AppGlobal.DailyReportColumn);
             List<CodeData> listISummary = list.Where(item => item.IsSummary == true).ToList();
-            using (var package = new ExcelPackage(stream))
+            using (var package = new ExcelPackage(streamExport))
             {
                 var workSheet = package.Workbook.Worksheets.Add(sheetName);
                 if (list.Count > 0)
@@ -3137,10 +3151,16 @@ namespace Commsights.MVC.Controllers
                 }
                 package.Save();
             }
-            stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+            streamExport.Position = 0;
+            var physicalPathCreate = Path.Combine(_hostingEnvironment.WebRootPath, AppGlobal.FTPDownloadReprotMonth, excelName);
+            using (var stream = new FileStream(physicalPathCreate, FileMode.Create))
+            {
+                streamExport.CopyTo(stream);
+            }
+            string result = AppGlobal.DomainSub + AppGlobal.URLDownloadReprotMonth + excelName;
+            return result;
         }
-        public IActionResult Export001ExportExcelForDailyAllVietnamese(CancellationToken cancellationToken)
+        public string Export001ExportExcelForDailyAllVietnamese(CancellationToken cancellationToken)
         {
             List<CodeData> list = new List<CodeData>();
             string excelName = @"Daily_" + AppGlobal.DateTimeCode + ".xlsx";
@@ -3148,12 +3168,13 @@ namespace Commsights.MVC.Controllers
             try
             {
                 string industryName = "";
-                DateTime dateUpdatedBegin = DateTime.Parse(Request.Cookies["CodeDataDailyDatePublishBegin"]);
-                DateTime dateUpdatedEnd = DateTime.Parse(Request.Cookies["CodeDataDailyDatePublishEnd"]);
+                DateTime dateBegin = DateTime.Parse(Request.Cookies["CodeDataDailyDateBegin"]);
+                DateTime dateEnd = DateTime.Parse(Request.Cookies["CodeDataDailyDateEnd"]);
                 int hourBegin = int.Parse(Request.Cookies["CodeDataDailyHourBegin"]);
                 int hourEnd = int.Parse(Request.Cookies["CodeDataDailyHourEnd"]);
                 int industryID = int.Parse(Request.Cookies["CodeDataDailyIndustryID"]);
-                list = _codeDataRepository.GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDToList(dateUpdatedBegin, dateUpdatedEnd, hourBegin, hourEnd, industryID);
+                bool isUpload = bool.Parse(Request.Cookies["CodeDataDailyIsUpload"]);
+                list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload);
                 Config industry = _configResposistory.GetByID(industryID);
                 if (industry != null)
                 {
@@ -3161,17 +3182,17 @@ namespace Commsights.MVC.Controllers
                 }
                 sheetName = industryName;
                 industryName = AppGlobal.SetName(industryName);
-                excelName = @"Daily_" + industryName + "_" + dateUpdatedBegin.ToString("yyyyMMdd") + "_" + dateUpdatedEnd.ToString("yyyyMMdd") + "_" + AppGlobal.DateTimeCode + ".xlsx";
+                excelName = @"Daily_" + industryName + "_" + dateBegin.ToString("yyyyMMdd") + "_" + dateEnd.ToString("yyyyMMdd") + "_" + AppGlobal.DateTimeCode + ".xlsx";
             }
             catch
             {
             }
-            var stream = new MemoryStream();
+            var streamExport = new MemoryStream();
             Color color = Color.FromArgb(int.Parse("#c00000".Replace("#", ""), System.Globalization.NumberStyles.AllowHexSpecifier));
             Color colorTitle = Color.FromArgb(int.Parse("#ed7d31".Replace("#", ""), System.Globalization.NumberStyles.AllowHexSpecifier));
             List<Config> listDailyReportColumn = _configResposistory.GetByGroupNameAndCodeToList(Commsights.Data.Helpers.AppGlobal.CRM, Commsights.Data.Helpers.AppGlobal.DailyReportColumn);
             List<CodeData> listISummary = list.Where(item => item.IsSummary == true).ToList();
-            using (var package = new ExcelPackage(stream))
+            using (var package = new ExcelPackage(streamExport))
             {
                 var workSheet = package.Workbook.Worksheets.Add(sheetName);
                 if (list.Count > 0)
@@ -3500,8 +3521,14 @@ namespace Commsights.MVC.Controllers
                 }
                 package.Save();
             }
-            stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+            streamExport.Position = 0;
+            var physicalPathCreate = Path.Combine(_hostingEnvironment.WebRootPath, AppGlobal.FTPDownloadReprotMonth, excelName);
+            using (var stream = new FileStream(physicalPathCreate, FileMode.Create))
+            {
+                streamExport.CopyTo(stream);
+            }
+            string result = AppGlobal.DomainSub + AppGlobal.URLDownloadReprotMonth + excelName;
+            return result;
         }
         public IActionResult ExportExcelScanFiles(CancellationToken cancellationToken)
         {
