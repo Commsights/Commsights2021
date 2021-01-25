@@ -209,18 +209,19 @@ namespace Commsights.MVC.Controllers
                     {
                         product.ParentID = media.ID;
                         int advalue = 1;
+                        int color = 1;
                         if (media.Color > 0)
                         {
-                            advalue = media.Color.Value;
+                            color = media.Color.Value;
                         }
                         int durationValue = int.Parse(product.Duration);
                         if (model.IsVideo == true)
                         {
-                            advalue = advalue * durationValue / 30;
+                            advalue = color / 30 * durationValue;
                         }
                         else
                         {
-                            advalue = advalue * durationValue / 100;
+                            advalue = color / 100 * durationValue;
                         }
                         product.Advalue = advalue;
                     }
@@ -357,13 +358,14 @@ namespace Commsights.MVC.Controllers
                                 if (parent.ID > 0)
                                 {
                                     int advalue = 1;
+                                    int color = 1;
                                     if (parent.Color > 0)
                                     {
-                                        advalue = parent.Color.Value;
+                                        color = parent.Color.Value;
                                     }
                                     duration = duration.Replace(@"s", @"");
                                     int durationValue = int.Parse(duration);
-                                    advalue = advalue * durationValue / 30;
+                                    advalue = color / 30 * durationValue;
                                     model.Advalue = advalue;
                                 }
                             }
@@ -386,13 +388,14 @@ namespace Commsights.MVC.Controllers
                                 if (parent.ID > 0)
                                 {
                                     int advalue = 1;
+                                    int color = 1;
                                     if (parent.Color > 0)
                                     {
-                                        advalue = parent.Color.Value;
+                                        color = parent.Color.Value;
                                     }
                                     totalSize = totalSize.Replace(@"%", @"");
                                     int durationValue = int.Parse(totalSize);
-                                    advalue = advalue * durationValue / 100;
+                                    advalue = color / 100 * durationValue;
                                     model.Advalue = advalue;
                                 }
                             }
@@ -486,13 +489,14 @@ namespace Commsights.MVC.Controllers
                                 if (parent.ID > 0)
                                 {
                                     int advalue = 1;
+                                    int color = 1;
                                     if (parent.Color > 0)
                                     {
-                                        advalue = parent.Color.Value;
+                                        color = parent.Color.Value;
                                     }
                                     duration = duration.Replace(@"s", @"");
                                     int durationValue = int.Parse(duration);
-                                    advalue = advalue * durationValue / 30;
+                                    advalue = color / 30 * durationValue;
                                     model.Advalue = advalue;
                                 }
                             }
@@ -519,13 +523,14 @@ namespace Commsights.MVC.Controllers
                                 if (parent.ID > 0)
                                 {
                                     int advalue = 1;
+                                    int color = 1;
                                     if (parent.Color > 0)
                                     {
-                                        advalue = parent.Color.Value;
+                                        color = parent.Color.Value;
                                     }
                                     totalSize = totalSize.Replace(@"%", @"");
                                     int durationValue = int.Parse(totalSize);
-                                    advalue = advalue * durationValue / 100;
+                                    advalue = color / 100 * durationValue;
                                     model.Advalue = advalue;
                                 }
                             }
