@@ -5302,26 +5302,29 @@ namespace Commsights.MVC.Controllers
                                                                 {
                                                                     product.Title = AppGlobal.FinderTitle(product.URLCode);
                                                                 }
-                                                                if (string.IsNullOrEmpty(product.Description))
-                                                                {
-                                                                    string html = AppGlobal.FinderHTMLContent(product.URLCode);
-                                                                    AppGlobal.FinderContentAndDatePublish002(html, product);
-                                                                }
                                                                 if (!string.IsNullOrEmpty(product.Title))
                                                                 {
-                                                                    product.Title = HttpUtility.HtmlDecode(product.Title);
-                                                                    product.MetaTitle = AppGlobal.SetName(product.Title);
-                                                                }
-                                                                if (!string.IsNullOrEmpty(product.Description))
-                                                                {
-                                                                    product.Description = HttpUtility.HtmlDecode(product.Description);
-                                                                }
-                                                                if (!string.IsNullOrEmpty(product.ContentMain))
-                                                                {
-                                                                    product.ContentMain = HttpUtility.HtmlDecode(product.ContentMain);
-                                                                }
-                                                                product.Initialization(InitType.Insert, RequestUserID);
-                                                                string resultString = _productRepository.InsertSingleItemAuto(product);
+                                                                    if (string.IsNullOrEmpty(product.Description))
+                                                                    {
+                                                                        string html = AppGlobal.FinderHTMLContent(product.URLCode);
+                                                                        AppGlobal.FinderContentAndDatePublish002(html, product);
+                                                                    }
+                                                                    if (!string.IsNullOrEmpty(product.Title))
+                                                                    {
+                                                                        product.Title = HttpUtility.HtmlDecode(product.Title);
+                                                                        product.MetaTitle = AppGlobal.SetName(product.Title);
+                                                                    }
+                                                                    if (!string.IsNullOrEmpty(product.Description))
+                                                                    {
+                                                                        product.Description = HttpUtility.HtmlDecode(product.Description);
+                                                                    }
+                                                                    if (!string.IsNullOrEmpty(product.ContentMain))
+                                                                    {
+                                                                        product.ContentMain = HttpUtility.HtmlDecode(product.ContentMain);
+                                                                    }
+                                                                    product.Initialization(InitType.Insert, RequestUserID);
+                                                                    string resultString = _productRepository.InsertSingleItemAuto(product);
+                                                                }                                                                
                                                             }
                                                         }
                                                     }
