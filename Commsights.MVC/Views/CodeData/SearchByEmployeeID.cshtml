@@ -87,7 +87,7 @@
 .Events(ev => ev.Change("onGridChange"))
 .DataSource(dataSource => dataSource
 .Ajax()
-.PageSize(10)
+.PageSize(10000)
 .Model(model =>
 {
     model.Id(t => t.ProductPropertyID);

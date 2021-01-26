@@ -9,7 +9,7 @@
             @if (Model.Product.IsVideo == true)
             {
                 <h4>@Model.Product.Title (@Model.Product.DatePublish.ToString("MM/dd/yyyy"))</h4>
-                if(Model.Product.Image.Contains(@".mp3")==true)
+                if (Model.Product.Image.Contains(@".mp3") == true)
                 {
                     <audio width='100%' height='100px' controls>
                         <source src="@Model.Product.Image" type='audio/mpeg'>
@@ -18,9 +18,9 @@
                 else
                 {
                     <video width="100%" controls class="ViewContentVideo">
-                       <source src="@Model.Product.Image" type="video/mp4">
+                        <source src="@Model.Product.Image" type="video/mp4">
                     </video>
-                }                
+                }
             }
             else
             {
@@ -29,9 +29,10 @@
                 {
                     parentIcon = Model.Parent.Icon;
                 }
-            if (Model.Parent != null)
-            {
+                if (Model.Parent != null)
+                {
                     <img src="@Model.Parent.Icon" class="img-thumbnail" />
+                    <br />
                 }
                 foreach (Commsights.Data.Models.ProductProperty item in Model.ListProductProperty)
                 {
