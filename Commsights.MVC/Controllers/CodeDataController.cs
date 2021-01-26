@@ -3676,7 +3676,7 @@ namespace Commsights.MVC.Controllers
                     workSheet.Cells[rowExcel, column].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                     workSheet.Cells[rowExcel, column].Style.Border.Bottom.Color.SetColor(Color.Black);
                     column = column + 1;
-                    workSheet.Cells[rowExcel, column].Value = "Advalue";
+                    workSheet.Cells[rowExcel, column].Value = "Media Advalue";
                     workSheet.Cells[rowExcel, column].Style.Font.Bold = true;
                     workSheet.Cells[rowExcel, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Cells[rowExcel, column].Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -3710,7 +3710,7 @@ namespace Commsights.MVC.Controllers
                     workSheet.Cells[rowExcel, column].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                     workSheet.Cells[rowExcel, column].Style.Border.Bottom.Color.SetColor(Color.Black);
                     column = column + 1;
-                    workSheet.Cells[rowExcel, column].Value = "Media Advalue";
+                    workSheet.Cells[rowExcel, column].Value = "Advalue";
                     workSheet.Cells[rowExcel, column].Style.Font.Bold = true;
                     workSheet.Cells[rowExcel, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     workSheet.Cells[rowExcel, column].Style.Font.Color.SetColor(System.Drawing.Color.White);
