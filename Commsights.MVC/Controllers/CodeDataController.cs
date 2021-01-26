@@ -1526,7 +1526,12 @@ namespace Commsights.MVC.Controllers
                         workSheet.Cells[rowExcel, 22].Value = item.TierCommsights;
                         workSheet.Cells[rowExcel, 23].Value = item.MediaType;
                         workSheet.Cells[rowExcel, 24].Value = item.Journalist;
-                        workSheet.Cells[rowExcel, 25].Value = item.Advalue.Value.ToString("N0");
+                        decimal advalue = 0;
+                        if (item.Advalue != null)
+                        {
+                            advalue = item.Advalue.Value;
+                        }
+                        workSheet.Cells[rowExcel, 25].Value = advalue.ToString("N0");
                         workSheet.Cells[rowExcel, 25].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         workSheet.Cells[rowExcel, 26].Value = item.ROME_Corp_VND;
                         workSheet.Cells[rowExcel, 26].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
@@ -3834,7 +3839,6 @@ namespace Commsights.MVC.Controllers
         {
             string note = AppGlobal.InitString;
             int result = 0;
-            //model.URLCode = model.URLCode.Replace(@" ", @";");
             foreach (string item in model.URLCode.Split(' '))
             {
                 string url = item;
@@ -3879,7 +3883,7 @@ namespace Commsights.MVC.Controllers
                         }
                         if (string.IsNullOrEmpty(product.Title))
                         {
-                            product.Title = AppGlobal.FinderTitle001(product.URLCode);
+                            product.Title = AppGlobal.AsyncFinderTitle001(product.URLCode).Result;
                         }
                         //if ((product.DatePublish.Year > 2020) && (product.Active == true))
                         //{
