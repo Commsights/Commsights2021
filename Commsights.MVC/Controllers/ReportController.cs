@@ -5255,8 +5255,56 @@ namespace Commsights.MVC.Controllers
                                                         {
                                                             model.URLCode = workSheet.Cells[i, 1].Value.ToString().Trim();
                                                         }
+                                                        if (workSheet.Cells[i, 2].Value != null)
+                                                        {
+                                                            model.Title = workSheet.Cells[i, 2].Value.ToString().Trim();
+                                                        }
+                                                        if (workSheet.Cells[i, 3].Value != null)
+                                                        {
+                                                            model.Description = workSheet.Cells[i, 3].Value.ToString().Trim();
+                                                        }
+                                                        if (workSheet.Cells[i, 4].Value != null)
+                                                        {
+                                                            string datePublish = workSheet.Cells[i, 1].Value.ToString().Trim();
+                                                            try
+                                                            {
+                                                                model.DatePublish = DateTime.Parse(datePublish);
+                                                            }
+                                                            catch
+                                                            {
+                                                                try
+                                                                {
+                                                                    int year = int.Parse(datePublish.Split('/')[2]);
+                                                                    int month = int.Parse(datePublish.Split('/')[0]);
+                                                                    int day = int.Parse(datePublish.Split('/')[1]);
+                                                                    model.DatePublish = new DateTime(year, month, day, 0, 0, 0);
+                                                                }
+                                                                catch
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        int year = int.Parse(datePublish.Split('/')[2]);
+                                                                        int month = int.Parse(datePublish.Split('/')[1]);
+                                                                        int day = int.Parse(datePublish.Split('/')[0]);
+                                                                        model.DatePublish = new DateTime(year, month, day, 0, 0, 0);
+                                                                    }
+                                                                    catch
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            DateTime DateTimeStandard = new DateTime(1899, 12, 30);
+                                                                            model.DatePublish = DateTimeStandard.AddDays(int.Parse(datePublish));
+                                                                        }
+                                                                        catch
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                         if (!string.IsNullOrEmpty(model.URLCode))
                                                         {
+                                                            model.Description = model.ContentMain;
                                                             BaiVietUpload baiVietUpload = new BaiVietUpload();
                                                             baiVietUpload.ParentID = baiVietUploadCount.ID;
                                                             baiVietUpload.Title = model.Title;
@@ -5283,6 +5331,7 @@ namespace Commsights.MVC.Controllers
                                                                     product = new Product();
                                                                     product.Title = model.Title;
                                                                     product.Description = model.Description;
+                                                                    product.ContentMain = model.ContentMain;
                                                                     product.DatePublish = model.DatePublish;
                                                                     product.IsFilter = true;
                                                                     product.ParentID = config.ID;
@@ -5300,7 +5349,7 @@ namespace Commsights.MVC.Controllers
                                                                 }
                                                                 if (string.IsNullOrEmpty(product.Title))
                                                                 {
-                                                                    product.Title = AppGlobal.FinderTitle(product.URLCode);
+                                                                    product.Title = AppGlobal.FinderTitle001(product.URLCode);
                                                                 }
                                                                 if (!string.IsNullOrEmpty(product.Title))
                                                                 {
@@ -5324,7 +5373,7 @@ namespace Commsights.MVC.Controllers
                                                                     }
                                                                     product.Initialization(InitType.Insert, RequestUserID);
                                                                     string resultString = _productRepository.InsertSingleItemAuto(product);
-                                                                }                                                                
+                                                                }
                                                             }
                                                         }
                                                     }

@@ -3883,7 +3883,7 @@ namespace Commsights.MVC.Controllers
                         }
                         if (string.IsNullOrEmpty(product.Title))
                         {
-                            product.Title = AppGlobal.AsyncFinderTitle001(product.URLCode).Result;
+                            product.Title = AppGlobal.FinderTitle001(product.URLCode);
                         }
                         //if ((product.DatePublish.Year > 2020) && (product.Active == true))
                         //{
