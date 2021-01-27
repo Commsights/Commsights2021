@@ -13,5 +13,6 @@ namespace Commsights.Data.Repositories
         public List<BaiVietReport> GetReportByDateBeginAndDateEndToList(DateTime dateBegin, DateTime dateEnd);
         public List<BaiVietReport> GetReportByDateBeginAndDateEndAndIndustryIDToList(DateTime dateBegin, DateTime dateEnd, int industryID);
         public List<BaiVietReport> GetReportByDateBeginAndDateEndAndIndustryIDAndEmployeeIDToList(DateTime dateBegin, DateTime dateEnd, int industryID, int employeeID);
+        public List<BaiVietUpload> GetByDateBeginAndDateEndAndRequestUserIDAndIsFilterToList(DateTime dateBegin, DateTime dateEnd, int RequestUserID, bool isFilter);
     }
 }

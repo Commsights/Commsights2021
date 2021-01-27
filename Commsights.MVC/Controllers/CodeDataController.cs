@@ -36,13 +36,17 @@ namespace Commsights.MVC.Controllers
         private readonly IConfigRepository _configResposistory;
         private readonly IProductRepository _productRepository;
         private readonly IProductPropertyRepository _productPropertyRepository;
-        public CodeDataController(IWebHostEnvironment hostingEnvironment, ICodeDataRepository codeDataRepository, IConfigRepository configResposistory, IProductRepository productRepository, IProductPropertyRepository productPropertyRepository, IMembershipAccessHistoryRepository membershipAccessHistoryRepository) : base(membershipAccessHistoryRepository)
+        private readonly IBaiVietUploadCountRepository _baiVietUploadCountRepository;
+        private readonly IBaiVietUploadRepository _baiVietUploadRepository;
+        public CodeDataController(IWebHostEnvironment hostingEnvironment, IBaiVietUploadCountRepository baiVietUploadCountRepository, IBaiVietUploadRepository baiVietUploadRepository, ICodeDataRepository codeDataRepository, IConfigRepository configResposistory, IProductRepository productRepository, IProductPropertyRepository productPropertyRepository, IMembershipAccessHistoryRepository membershipAccessHistoryRepository) : base(membershipAccessHistoryRepository)
         {
             _hostingEnvironment = hostingEnvironment;
             _codeDataRepository = codeDataRepository;
             _configResposistory = configResposistory;
             _productRepository = productRepository;
             _productPropertyRepository = productPropertyRepository;
+            _baiVietUploadCountRepository = baiVietUploadCountRepository;
+            _baiVietUploadRepository = baiVietUploadRepository;
         }
         public IActionResult Data()
         {
@@ -3839,6 +3843,11 @@ namespace Commsights.MVC.Controllers
         {
             string note = AppGlobal.InitString;
             int result = 0;
+            BaiVietUploadCount baiVietUploadCount = new BaiVietUploadCount();
+            baiVietUploadCount.Count = model.URLCode.Split(' ').Length;
+            baiVietUploadCount.IndustryID = AppGlobal.IndustryID;
+            baiVietUploadCount.Initialization(InitType.Insert, RequestUserID);
+            _baiVietUploadCountRepository.Create(baiVietUploadCount);
             foreach (string item in model.URLCode.Split(' '))
             {
                 string url = item;
@@ -3887,6 +3896,12 @@ namespace Commsights.MVC.Controllers
                         }
                         //if ((product.DatePublish.Year > 2020) && (product.Active == true))
                         //{
+                        BaiVietUpload baiVietUpload = new BaiVietUpload();
+                        baiVietUpload.ParentID = baiVietUploadCount.ID;
+                        baiVietUpload.Title = model.Title;
+                        baiVietUpload.URLCode = model.URLCode;
+                        baiVietUpload.Initialization(InitType.Insert, RequestUserID);
+                        baiVietUpload.IsFilter = false;
                         if (!string.IsNullOrEmpty(product.Title))
                         {
                             product.Title = HttpUtility.HtmlDecode(product.Title);
@@ -3909,8 +3924,10 @@ namespace Commsights.MVC.Controllers
                             if (resultString == "-1")
                             {
                                 result = 1;
+                                baiVietUpload.IsFilter = true;
                             }
                         }
+                        _baiVietUploadRepository.Create(baiVietUpload);
                         //}
                     }
                 }

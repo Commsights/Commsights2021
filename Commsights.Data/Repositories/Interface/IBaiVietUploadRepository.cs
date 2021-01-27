@@ -9,5 +9,6 @@ namespace Commsights.Data.Repositories
 {
     public interface IBaiVietUploadRepository : IRepository<BaiVietUpload>
     {
+        public List<BaiVietUpload> GetByDateBeginAndDateEndAndRequestUserIDAndIsFilterToList(DateTime dateBegin, DateTime dateEnd, int RequestUserID, bool isFilter);
     }
 }

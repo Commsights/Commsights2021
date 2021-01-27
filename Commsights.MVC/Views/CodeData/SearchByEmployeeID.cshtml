@@ -28,6 +28,11 @@
                         </button>
                     </div>
                     <div class='col-sm-1'>
+                        <button type="button" class="btn btn-success" title="Export Code" onclick="onExportURL()">
+                            <span class="fas fa-file-excel"></span>
+                        </button>
+                    </div>
+                    <div class='col-sm-1'>
                         <button type="button" class="btn btn-danger" title="Delete" onclick="onDelete()">
                             <span class="fas fa-trash-alt"></span>
                         </button>
@@ -173,5 +178,14 @@
     }
     function onGridChange(arg) {
         $("#ID").val(this.selectedKeyNames().join(";"));        
+    }
+    function onExportURL() {
+        BeginRequestHandler();
+        var dateBeginValue = toDate02($("#DatePublishBegin").val());
+        var dateEndValue = toDate02($("#DatePublishEnd").val());
+        $.post("/BaiVietUploadCount/ExportURLExcel", { dateBegin: dateBeginValue, dateEnd: dateEndValue}, function (result) {
+            window.location.replace(result);
+            EndRequestHandler();
+        });
     }
 </script>
