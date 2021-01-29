@@ -525,6 +525,32 @@ namespace Commsights.Data.Repositories
             }
             return list;
         }
+        public List<CodeData> GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDAndIsDailyToList(DateTime dateUpdatedBegin, DateTime dateUpdatedEnd, int hourBegin, int hourEnd, int industryID, bool isDaily)
+        {
+            List<CodeData> list = new List<CodeData>();
+            if (industryID > 0)
+            {
+                try
+                {
+                    dateUpdatedBegin = new DateTime(dateUpdatedBegin.Year, dateUpdatedBegin.Month, dateUpdatedBegin.Day, hourBegin, 0, 0);
+                    dateUpdatedEnd = new DateTime(dateUpdatedEnd.Year, dateUpdatedEnd.Month, dateUpdatedEnd.Day, hourEnd, 59, 59);
+                    SqlParameter[] parameters =
+                    {
+                        new SqlParameter("@DateUpdatedBegin",dateUpdatedBegin),
+                        new SqlParameter("@DateUpdatedEnd",dateUpdatedEnd),
+                        new SqlParameter("@IndustryID",industryID),
+                        new SqlParameter("@IsDaily",isDaily),
+                    };
+                    DataTable dt = SQLHelper.Fill(AppGlobal.ConectionString, "sp_CodeDataDailySelectByDateUpdatedBeginAndDateUpdatedEndAndIndustryIDAndIsDaily", parameters);
+                    list = SQLHelper.ToList<CodeData>(dt);
+                }
+                catch (Exception e)
+                {
+                    string mes = e.Message;
+                }
+            }
+            return list;
+        }
         public List<CodeData> GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload)
         {
             List<CodeData> list = new List<CodeData>();
@@ -535,6 +561,19 @@ namespace Commsights.Data.Repositories
             else
             {
                 list = GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID);
+            }
+            return list;
+        }
+        public List<CodeData> GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload, bool isDaily)
+        {
+            List<CodeData> list = new List<CodeData>();
+            if (isUpload == true)
+            {
+                list = GetDailyByDateUpdatedBeginAndDateUpdatedEndAndHourBeginAndHourEndAndIndustryIDAndIsDailyToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isDaily);
+            }
+            else
+            {
+                list = GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDAndIsDailyToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isDaily);
             }
             return list;
         }
@@ -554,6 +593,32 @@ namespace Commsights.Data.Repositories
                         new SqlParameter("@IndustryID",industryID),
                     };
                     DataTable dt = SQLHelper.Fill(AppGlobal.ConectionString, "sp_CodeDataDailySelectByDatePublishBeginAndDatePublishEndAndIndustryID", parameters);
+                    list = SQLHelper.ToList<CodeData>(dt);
+                }
+                catch (Exception e)
+                {
+                    string mes = e.Message;
+                }
+            }
+            return list;
+        }
+        public List<CodeData> GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDAndIsDailyToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isDaily)
+        {
+            List<CodeData> list = new List<CodeData>();
+            if (industryID > 0)
+            {
+                try
+                {
+                    dateBegin = new DateTime(dateBegin.Year, dateBegin.Month, dateBegin.Day, hourBegin, 0, 0);
+                    dateEnd = new DateTime(dateEnd.Year, dateEnd.Month, dateEnd.Day, hourEnd, 59, 59);
+                    SqlParameter[] parameters =
+                    {
+                        new SqlParameter("@DatePublishBegin",dateBegin),
+                        new SqlParameter("@DatePublishEnd",dateEnd),
+                        new SqlParameter("@IndustryID",industryID),
+                        new SqlParameter("@IsDaily",isDaily),
+                    };
+                    DataTable dt = SQLHelper.Fill(AppGlobal.ConectionString, "sp_CodeDataDailySelectByDatePublishBeginAndDatePublishEndAndIndustryIDAndIsDaily", parameters);
                     list = SQLHelper.ToList<CodeData>(dt);
                 }
                 catch (Exception e)

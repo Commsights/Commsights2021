@@ -2057,6 +2057,19 @@ namespace Commsights.MVC.Controllers
             List<CodeData> list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload);
             return Json(list.ToDataSourceResult(request));
         }
+        public ActionResult GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList([DataSourceRequest] DataSourceRequest request, DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload)
+        {
+            var cookieExpires = new CookieOptions();
+            cookieExpires.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.Append("CodeDataDailyDateBegin", dateBegin.ToString("MM/dd/yyyy"), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyDateEnd", dateEnd.ToString("MM/dd/yyyy"), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyHourBegin", hourBegin.ToString(), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyHourEnd", hourEnd.ToString(), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyIndustryID", industryID.ToString(), cookieExpires);
+            Response.Cookies.Append("CodeDataDailyIsUpload", isUpload.ToString(), cookieExpires);
+            List<CodeData> list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload, true);
+            return Json(list.ToDataSourceResult(request));
+        }
         public ActionResult GetDailyByDatePublishBeginAndDatePublishEndAndHourBeginAndHourEndAndIndustryIDToList([DataSourceRequest] DataSourceRequest request, DateTime dateUpdatedBegin, DateTime dateUpdatedEnd, int hourBegin, int hourEnd, int industryID)
         {
             var cookieExpires = new CookieOptions();
@@ -2818,7 +2831,7 @@ namespace Commsights.MVC.Controllers
                 int hourEnd = int.Parse(Request.Cookies["CodeDataDailyHourEnd"]);
                 int industryID = int.Parse(Request.Cookies["CodeDataDailyIndustryID"]);
                 bool isUpload = bool.Parse(Request.Cookies["CodeDataDailyIsUpload"]);
-                list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload);
+                list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload, true);
                 Config industry = _configResposistory.GetByID(industryID);
                 if (industry != null)
                 {
@@ -3183,7 +3196,7 @@ namespace Commsights.MVC.Controllers
                 int hourEnd = int.Parse(Request.Cookies["CodeDataDailyHourEnd"]);
                 int industryID = int.Parse(Request.Cookies["CodeDataDailyIndustryID"]);
                 bool isUpload = bool.Parse(Request.Cookies["CodeDataDailyIsUpload"]);
-                list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload);
+                list = _codeDataRepository.GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList(dateBegin, dateEnd, hourBegin, hourEnd, industryID, isUpload, true);
                 Config industry = _configResposistory.GetByID(industryID);
                 if (industry != null)
                 {

@@ -51,5 +51,6 @@ namespace Commsights.Data.Repositories
         public List<CodeData0001> GetByDatePublishBeginAndDatePublishEndAndIndustryIDAndEmployeeIDAndSourceIsNotNewspageAndTV0001ToList(DateTime datePublishBegin, DateTime datePublishEnd, int industryID, int employeeID, string sourceNewspage, string sourceTV);
 
         public List<CodeData> GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload);
+        public List<CodeData> GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList(DateTime dateBegin, DateTime dateEnd, int hourBegin, int hourEnd, int industryID, bool isUpload, bool isDaily);
     }
 }

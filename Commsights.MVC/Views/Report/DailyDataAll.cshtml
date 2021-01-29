@@ -149,7 +149,7 @@
     model.Field(t => t.ProductPropertyID).Editable(false);
 })
 .Events(t => { t.RequestEnd("onGridRequestEnd"); })
-.Read(t => t.Action("GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadToList", "CodeData").Data("filterCodeData"))
+.Read(t => t.Action("GetDailyByDateBeginAndDateEndAndHourBeginAndHourEndAndIndustryIDAndIsUploadAndIsDailyToList", "CodeData").Data("filterCodeData"))
 .Destroy(t => t.Action("DeleteProductPropertyByID", "CodeData"))
 .Update(t => t.Action("UpdateProduct", "CodeData"))
 ))
