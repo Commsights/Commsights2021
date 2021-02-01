@@ -409,6 +409,7 @@ namespace Commsights.MVC.Controllers
                             foreach (ProductProperty item in listProductProperty)
                             {
                                 ProductProperty productProperty = new ProductProperty();
+                                productProperty.IsDaily = true;
                                 productProperty.Active = false;
                                 productProperty.FileName = item.FileName;
                                 productProperty.Page = item.Page;
@@ -429,6 +430,7 @@ namespace Commsights.MVC.Controllers
                         productProperty.ParentID = model.ID;
                         productProperty.IndustryID = industryID;
                         productProperty.Code = AppGlobal.Industry;
+                        productProperty.IsDaily = true;
                         _productPropertyRepository.Create(productProperty);
                     }
                 }
@@ -548,6 +550,7 @@ namespace Commsights.MVC.Controllers
                             foreach (ProductProperty item in listProductProperty)
                             {
                                 ProductProperty productProperty = new ProductProperty();
+                                productProperty.IsDaily = true;
                                 productProperty.Active = false;
                                 productProperty.FileName = item.FileName;
                                 productProperty.Page = item.Page;
@@ -568,6 +571,7 @@ namespace Commsights.MVC.Controllers
                         productProperty.ParentID = model.ID;
                         productProperty.IndustryID = industryID;
                         productProperty.Code = AppGlobal.Industry;
+                        productProperty.IsDaily = true;
                         _productPropertyRepository.Create(productProperty);
                     }
                     foreach (ProductProperty item in listProductProperty)
