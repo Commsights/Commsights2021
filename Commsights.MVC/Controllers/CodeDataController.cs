@@ -3937,6 +3937,11 @@ namespace Commsights.MVC.Controllers
                             if (resultString == "-1")
                             {
                                 result = 1;
+                            }
+                            product = _productRepository.GetByURLCode(url);
+                            List<ProductProperty> list = _productPropertyRepository.GetByParentIDToList(product.ID);
+                            if (list.Count > 0)
+                            {
                                 baiVietUpload.IsFilter = true;
                             }
                         }
