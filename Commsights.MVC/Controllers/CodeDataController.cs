@@ -3911,8 +3911,8 @@ namespace Commsights.MVC.Controllers
                         //{
                         BaiVietUpload baiVietUpload = new BaiVietUpload();
                         baiVietUpload.ParentID = baiVietUploadCount.ID;
-                        baiVietUpload.Title = model.Title;
-                        baiVietUpload.URLCode = url;
+                        baiVietUpload.Title = product.Title;
+                        baiVietUpload.URLCode = product.URLCode;
                         baiVietUpload.Initialization(InitType.Insert, RequestUserID);
                         baiVietUpload.IsFilter = false;
                         if (!string.IsNullOrEmpty(product.Title))
