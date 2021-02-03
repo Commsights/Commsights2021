@@ -4125,7 +4125,7 @@ namespace Commsights.Data.Helpers
             for (int i = 0; i < m1.Count; i++)
             {
                 string value = m1[i].Groups[1].Value;
-                if ((value.Contains(@"<img") == true) || (value.Contains(@"</a>") == true) || (value.Contains(@"</script>") == true) || (value.Contains(@"</noscript>") == true) || (value.Contains(@"</style>") == true))
+                if ((value.Contains(@"</script>") == true) || (value.Contains(@"</noscript>") == true) || (value.Contains(@"</style>") == true))
                 {
 
                 }
@@ -4681,15 +4681,15 @@ namespace Commsights.Data.Helpers
                             }
                         }
                     }
-                    if (title.Split('|').Length > 2)
-                    {
-                        title = title.Split('|')[1];
-                    }
-                    if (title.Split('|').Length > 1)
-                    {
-                        title = title.Split('|')[0];
-                    }
-                    title = title.Trim();
+                    //if (title.Split('|').Length > 2)
+                    //{
+                    //    title = title.Split('|')[1];
+                    //}
+                    //if (title.Split('|').Length > 1)
+                    //{
+                    //    title = title.Split('|')[0];
+                    //}
+                    //title = title.Trim();
                 }
             }
             catch (Exception e)
