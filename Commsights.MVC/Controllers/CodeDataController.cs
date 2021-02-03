@@ -3912,7 +3912,7 @@ namespace Commsights.MVC.Controllers
                         BaiVietUpload baiVietUpload = new BaiVietUpload();
                         baiVietUpload.ParentID = baiVietUploadCount.ID;
                         baiVietUpload.Title = model.Title;
-                        baiVietUpload.URLCode = model.URLCode;
+                        baiVietUpload.URLCode = url;
                         baiVietUpload.Initialization(InitType.Insert, RequestUserID);
                         baiVietUpload.IsFilter = false;
                         if (!string.IsNullOrEmpty(product.Title))

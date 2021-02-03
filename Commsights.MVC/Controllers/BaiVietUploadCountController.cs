@@ -162,6 +162,7 @@ namespace Commsights.MVC.Controllers
                     workSheet.Cells[row, 1].Style.Border.Right.Color.SetColor(Color.Black);
                     workSheet.Cells[row, 1].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                     workSheet.Cells[row, 1].Style.Border.Bottom.Color.SetColor(Color.Black);
+                    index = index + 1;
                 }
                 for (int i = 1; i <= 4; i++)
                 {
