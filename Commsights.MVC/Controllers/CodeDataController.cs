@@ -3804,7 +3804,12 @@ namespace Commsights.MVC.Controllers
                             }
                             if (i == 8)
                             {
-                                workSheet.Cells[row, i].Value = list[index].Advalue.Value.ToString("N0");
+                                decimal advalue = 0;
+                                if (list[index].Advalue != null)
+                                {
+                                    advalue = list[index].Advalue.Value;
+                                }
+                                workSheet.Cells[row, i].Value = advalue.ToString("N0");
                                 workSheet.Cells[row, i].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                             }
                             if (i == 9)
